@@ -103,7 +103,7 @@ function App() {
       .catch(err => console.log('⚠️ Fuel pre-load failed (non-critical):', err));
 
     // Pre-load grocery data in background (ADD THIS WHOLE BLOCK)
-    fetch('/api/n8n/webhook/grocery-comparison', {
+    fetch(N8N_GROCERY_WEBHOOK, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

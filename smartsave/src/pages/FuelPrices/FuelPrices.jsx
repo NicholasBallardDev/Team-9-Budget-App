@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import BrandBadge from '../../components/BrandBadge/BrandBadge';
 import './FuelPrices.css';
 
@@ -15,6 +15,7 @@ function FuelPrices({ onNavigate, userPostcode }) {
   const [fuelData, setFuelData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const hasFetchedRef = useRef(false);
 
   // Get postcode from props or localStorage
   const postcode = userPostcode || localStorage.getItem('userPostcode') || '2000';
@@ -64,6 +65,7 @@ function FuelPrices({ onNavigate, userPostcode }) {
       setError(error.message);
     } finally {
       setLoading(false);
+      hasFetchedRef.current = false;
     }
   };
 
