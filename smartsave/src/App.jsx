@@ -47,7 +47,6 @@ function App() {
   const [loadingInsights, setLoadingInsights] = useState(false);
   const [fuelData, setFuelData] = useState(null);
   const [groceryData, setGroceryData] = useState(null);
-
   const handleOnboardingComplete = async (data) => {
   setLoadingInsights(true);
   setFormData(data);
@@ -103,6 +102,7 @@ function App() {
       .catch(err => console.log('⚠️ Fuel pre-load failed (non-critical):', err));
 
     // Pre-load grocery data in background (ADD THIS WHOLE BLOCK)
+    //n8n integration
     fetch('/api/n8n/webhook/grocery-comparison', {
       method: "POST",
       headers: { "Content-Type": "application/json" },
