@@ -1,0 +1,149 @@
+.financial-overview {
+  min-height: 100vh;
+  background: #f9fafb;
+  padding-bottom: 80px;
+}
+
+.overview-header {
+  padding: 24px 20px;
+  background: linear-gradient(135deg, #16a34a, #0ea5e9);
+  color: white;
+}
+
+.overview-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.overview-subtitle {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.quick-actions {
+  padding: 0 20px;
+  margin-top: -20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.quick-action-card {
+  padding: 16px;
+  border-radius: 12px;
+  border: none;
+  background: white;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+}
+
+.quick-action-card:hover {
+  transform: translateY(-2px);
+}
+
+.quick-action-icon {
+  font-size: 20px;
+  margin-bottom: 4px;
+}
+
+.quick-action-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.category-section {
+  padding: 24px 20px;
+}
+
+.section-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 16px;
+}
+
+.category-card {
+  margin-bottom: 20px;
+  padding: 16px;
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+}
+
+.category-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.category-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.category-amount {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.category-amount.over {
+  color: #ef4444;
+}
+
+.category-amount.under {
+  color: #16a34a;
+}
+
+.category-progress {
+  width: 100%;
+  height: 8px;
+  background: #f3f4f6;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.category-progress-bar {
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+.category-progress-bar.over {
+  background: #ef4444;
+}
+
+.category-progress-bar.under {
+  background: #16a34a;
+}
+
+.category-footer {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+}
+
+.budget-info {
+  color: #6b7280;
+}
+
+.budget-status.over {
+  color: #ef4444;
+}
+
+.budget-status.under {
+  color: #16a34a;
+}
+
+.category-insight {
+  margin-top: 12px;
+  padding: 12px;
+  background: #f0fdf4;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #166534;
+}

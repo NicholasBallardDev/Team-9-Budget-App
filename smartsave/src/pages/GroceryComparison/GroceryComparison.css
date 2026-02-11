@@ -1,0 +1,155 @@
+.grocery-comparison {
+  min-height: 100vh;
+  background: #f9fafb;
+  padding-bottom: 80px;
+}
+
+.grocery-header {
+  padding: 20px 24px;
+  background: white;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.grocery-header-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.grocery-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.search-container {
+  position: relative;
+}
+
+.search-icon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 18px;
+  color: #9ca3af;
+}
+
+.search-input {
+  width: 100%;
+  padding: 14px 16px 14px 48px;
+  border-radius: 12px;
+  border: 2px solid #e5e7eb;
+  font-size: 15px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.search-input:focus {
+  border-color: #16a34a;
+}
+
+.grocery-results {
+  padding: 16px 16px 100px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px;
+  color: #9ca3af;
+}
+
+.empty-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.grocery-item-card {
+  margin-bottom: 16px;
+  padding: 16px;
+  background: white;
+  border-radius: 16px;
+  border: 2px solid #e5e7eb;
+}
+
+.grocery-item-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 12px;
+}
+
+.price-comparison {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.store-price {
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+}
+
+.store-price.best {
+  background: #fee2e2;
+  border-color: #dc2626;
+}
+
+.store-price.best:nth-child(2) {
+  background: #dcfce7;
+  border-color: #16a34a;
+}
+
+.store-label {
+  font-size: 10px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  letter-spacing: 0.5px;
+}
+
+.store-label.coles {
+  color: #dc2626;
+}
+
+.store-label.woolworths {
+  color: #16a34a;
+}
+
+.store-price-value {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.store-price-value.best-coles {
+  color: #dc2626;
+}
+
+.store-price-value.best-woolworths {
+  color: #16a34a;
+}
+
+.best-price-badge {
+  margin-top: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  color: #dc2626;
+}
+
+.store-price.best:nth-child(2) .best-price-badge {
+  color: #16a34a;
+}
+
+.savings-badge {
+  margin-top: 12px;
+  padding: 8px;
+  background: #f0fdf4;
+  border-radius: 8px;
+  font-size: 12px;
+  color: #166534;
+  text-align: center;
+}
