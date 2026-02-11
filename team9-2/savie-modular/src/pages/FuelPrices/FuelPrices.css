@@ -1,0 +1,200 @@
+.fuel-prices {
+  min-height: 100vh;
+  background: #f9fafb;
+  padding-bottom: 80px;
+}
+
+.fuel-header {
+  padding: 20px 24px;
+  background: white;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.fuel-header-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.back-button {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  background: white;
+  color: #6b7280;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.back-button:hover {
+  background: #f9fafb;
+}
+
+.fuel-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.fuel-type-selector {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.fuel-type-button {
+  padding: 10px 8px;
+  border-radius: 10px;
+  border: none;
+  background: #f3f4f6;
+  color: #6b7280;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.fuel-type-button.active {
+  background: #14b8a6;
+  color: white;
+}
+
+.fuel-type-button:hover:not(.active) {
+  background: #e5e7eb;
+}
+
+.rewards-card {
+  margin: 16px 16px 0;
+  padding: 16px;
+  background: white;
+  border-radius: 16px;
+  border: 2px solid #f59e0b;
+}
+
+.rewards-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.rewards-label {
+  font-size: 12px;
+  color: #92400e;
+  font-weight: 700;
+  margin-bottom: 4px;
+  letter-spacing: 0.5px;
+}
+
+.rewards-visits {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.rewards-icon {
+  font-size: 32px;
+}
+
+.rewards-progress {
+  width: 100%;
+  height: 12px;
+  background: #fef3c7;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.rewards-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #f59e0b, #ef4444);
+  transition: width 0.3s ease;
+}
+
+.rewards-message {
+  font-size: 13px;
+  color: #6b7280;
+  margin: 0;
+}
+
+.stations-section {
+  padding: 16px 16px 100px;
+}
+
+.stations-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 12px;
+}
+
+.station-card {
+  margin-bottom: 12px;
+  padding: 16px;
+  background: white;
+  border-radius: 16px;
+  border: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: transform 0.2s;
+}
+
+.station-card.best {
+  border: 3px solid #16a34a;
+  box-shadow: 0 4px 12px rgba(22, 163, 74, 0.15);
+}
+
+.station-card:hover {
+  transform: translateY(-2px);
+}
+
+.station-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.station-name {
+  font-weight: 700;
+  font-size: 15px;
+  color: #1a1a1a;
+  margin-bottom: 2px;
+}
+
+.station-address {
+  font-size: 12px;
+  color: #9ca3af;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.station-price {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.price-value {
+  font-family: 'DM Mono', monospace;
+  font-size: 22px;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.price-value.best {
+  color: #16a34a;
+}
+
+.price-unit {
+  font-size: 11px;
+  color: #9ca3af;
+  margin-top: 2px;
+}
