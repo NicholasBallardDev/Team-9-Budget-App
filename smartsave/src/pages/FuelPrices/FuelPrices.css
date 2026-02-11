@@ -1,82 +1,149 @@
-.fuel-prices {
-  min-height: 100vh;
-  background: #f9fafb;
-  padding-bottom: 80px;
+/* Fix the insight banner spacing */
+.fuel-insight-banner {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 15px 20px;
+  border-radius: 12px;
+  margin: 15px 0;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 500;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 }
 
-.fuel-header {
-  padding: 20px 24px;
-  background: white;
-  border-bottom: 1px solid #e5e7eb;
-}
-
-.fuel-header-top {
+/* Better station card layout */
+.station-card {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 16px;
+  gap: 15px;
+  padding: 16px;
+  background: white;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.back-button {
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
-  border: 1px solid #e5e7eb;
-  background: white;
-  color: #6b7280;
-  font-size: 18px;
+.station-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.station-card.best {
+  border: 2px solid #10b981;
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+}
+
+.best-badge {
+  position: absolute;
+  top: -8px;
+  right: 12px;
+  background: #10b981;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
   font-weight: 600;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.2s;
 }
 
-.back-button:hover {
-  background: #f9fafb;
+/* Station info */
+.station-info {
+  flex: 1;
 }
 
-.fuel-title {
+.station-name {
+  font-weight: 600;
+  font-size: 15px;
+  color: #1f2937;
+  margin-bottom: 4px;
+}
+
+.station-address {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+/* Price display */
+.station-price {
+  text-align: right;
+  min-width: 100px;
+}
+
+.price-value {
   font-size: 24px;
   font-weight: 700;
-  color: #1a1a1a;
-  margin: 0;
+  color: #1f2937;
 }
 
+.price-value.best {
+  color: #10b981;
+}
+
+.price-unit {
+  font-size: 11px;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.price-diff {
+  font-size: 12px;
+  color: #ef4444;
+  margin-top: 4px;
+}
+
+/* Fuel type selector */
 .fuel-type-selector {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
   gap: 8px;
+  margin: 15px 0;
+  overflow-x: auto;
+  padding-bottom: 4px;
 }
 
 .fuel-type-button {
-  padding: 10px 8px;
-  border-radius: 10px;
-  border: none;
-  background: #f3f4f6;
-  color: #6b7280;
-  font-size: 13px;
-  font-weight: 700;
+  padding: 8px 16px;
+  border: 2px solid #e5e7eb;
+  background: white;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
   cursor: pointer;
   transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.fuel-type-button:hover {
+  border-color: #667eea;
+  background: #f5f7ff;
 }
 
 .fuel-type-button.active {
-  background: #14b8a6;
+  border-color: #667eea;
+  background: #667eea;
   color: white;
 }
 
-.fuel-type-button:hover:not(.active) {
-  background: #e5e7eb;
+/* Best price banner */
+.best-price-banner {
+  background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+  border: 2px solid #10b981;
+  color: #065f46;
+  padding: 14px 20px;
+  border-radius: 12px;
+  margin: 15px 0;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 500;
 }
 
+/* Rewards card */
 .rewards-card {
-  margin: 16px 16px 0;
+  background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
   padding: 16px;
-  background: white;
-  border-radius: 16px;
-  border: 2px solid #f59e0b;
+  border-radius: 12px;
+  margin: 15px 0;
+  border: 2px solid #fb923c;
 }
 
 .rewards-header {
@@ -88,113 +155,109 @@
 
 .rewards-label {
   font-size: 12px;
-  color: #92400e;
   font-weight: 700;
-  margin-bottom: 4px;
+  color: #9a3412;
   letter-spacing: 0.5px;
 }
 
 .rewards-visits {
-  font-size: 16px;
-  font-weight: 700;
-  color: #1a1a1a;
+  font-size: 14px;
+  font-weight: 600;
+  color: #431407;
+  margin-top: 4px;
 }
 
 .rewards-icon {
-  font-size: 32px;
+  font-size: 28px;
 }
 
 .rewards-progress {
-  width: 100%;
-  height: 12px;
-  background: #fef3c7;
-  border-radius: 10px;
+  height: 8px;
+  background: #fed7aa;
+  border-radius: 4px;
   overflow: hidden;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
 }
 
 .rewards-progress-bar {
   height: 100%;
-  background: linear-gradient(90deg, #f59e0b, #ef4444);
+  background: #ea580c;
   transition: width 0.3s ease;
 }
 
 .rewards-message {
   font-size: 13px;
-  color: #6b7280;
+  color: #9a3412;
   margin: 0;
 }
 
+/* Update FuelPrices.css - reduce spacing */
+
+.fuel-prices {
+  padding: 16px;
+  padding-bottom: 80px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.fuel-header {
+  margin-bottom: 16px;
+}
+
+.fuel-location {
+  margin: 4px 0 12px 0;
+}
+
+/* Tighter section spacing */
+.fuel-insight-banner {
+  margin: 12px 0;
+}
+
+.rewards-card {
+  margin: 12px 0;
+}
+
+.best-price-banner {
+  margin: 12px 0;
+}
+
 .stations-section {
-  padding: 16px 16px 100px;
+  margin-top: 16px;
 }
 
 .stations-title {
-  font-size: 16px;
-  font-weight: 700;
-  color: #1a1a1a;
   margin-bottom: 12px;
 }
 
+/* Tighter card spacing */
 .station-card {
-  margin-bottom: 12px;
-  padding: 16px;
-  background: white;
-  border-radius: 16px;
-  border: 1px solid #e5e7eb;
+  margin-bottom: 10px;
+  padding: 14px;
+}
+
+/* Loading state */
+.loading-container {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 12px;
-  transition: transform 0.2s;
+  justify-content: center;
+  padding: 60px 20px;
+  gap: 16px;
 }
 
-.station-card.best {
-  border: 3px solid #16a34a;
-  box-shadow: 0 4px 12px rgba(22, 163, 74, 0.15);
+.loading-container p {
+  color: #6b7280;
+  font-size: 16px;
+  margin: 0;
 }
 
-.station-card:hover {
-  transform: translateY(-2px);
+/* Spinner animation */
+.spinner {
+  font-size: 48px;
+  animation: bounce 0.6s ease-in-out infinite alternate;
 }
 
-.station-info {
-  flex: 1;
-  min-width: 0;
-}
-
-.station-name {
-  font-weight: 700;
-  font-size: 15px;
-  color: #1a1a1a;
-  margin-bottom: 2px;
-}
-
-.station-address {
-  font-size: 12px;
-  color: #9ca3af;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.station-price {
-  text-align: right;
-  flex-shrink: 0;
-}
-
-.price-value {
-  font-family: 'DM Mono', monospace;
-  font-size: 22px;
-  font-weight: 700;
-  color: #1a1a1a;
-}
-
-.price-value.best {
-  color: #16a34a;
-}
-
-.price-unit {
-  font-size: 11px;
-  color: #9ca3af;
-  margin-top: 2px;
+@keyframes bounce {
+  0% { transform: translateY(0) scale(1); }
+  100% { transform: translateY(-20px) scale(1.1); }
 }

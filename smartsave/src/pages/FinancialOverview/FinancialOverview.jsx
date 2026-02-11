@@ -1,7 +1,28 @@
 import './FinancialOverview.css';
 
 function FinancialOverview({ insights, onNavigate }) {
-  const categoryTotals = getCategoryTotals();
+  // Safety check - if no insights, show loading or error
+  if (!insights) {
+    return (
+      <div className="financial-overview">
+        <div className="overview-header">
+          <h1>Loading your insights...</h1>
+        </div>
+      </div>
+    );
+  }
+
+  // Safety check - if no categories, show error
+  if (!insights.categories || insights.categories.length === 0) {
+    return (
+      <div className="financial-overview">
+        <div className="overview-header">
+          <h1>No insights available</h1>
+          <p>Please complete the onboarding again.</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="financial-overview">
@@ -23,22 +44,21 @@ function FinancialOverview({ insights, onNavigate }) {
           <div className="quick-action-title">Find Deals</div>
         </button>
       </div> */}
-      <h1>hi</h1>
+
       {/* Category Breakdown */}
       <div className="category-section">
         <h2 className="section-title">Where your money goes</h2>
 
-        {Object.entries(categoryTotals).map(([category, total]) => {
-          const budget = category === "Housing" ? 1600 : category === "Groceries" ? 300 : category === "Shopping" ? 200 : 100;
-          const percentage = Math.min((total / budget) * 100, 100);
-          const isOverBudget = total > budget;
+        {insights.categories.map((category) => {
+          const percentage = Math.min((category.total / category.budget) * 100, 100);
+          const isOverBudget = category.total > category.budget;
 
           return (
-            <div key={category} className="category-card">
+            <div key={category.name} className="category-card">
               <div className="category-header">
-                <span className="category-name">{category}</span>
+                <span className="category-name">{category.name}</span>
                 <span className={`category-amount ${isOverBudget ? 'over' : 'under'}`}>
-                  ${total.toFixed(2)}
+                  ${category.total.toFixed(2)}
                 </span>
               </div>
 
@@ -51,22 +71,23 @@ function FinancialOverview({ insights, onNavigate }) {
 
               <div className="category-footer">
                 <span className="budget-info">
-                  {percentage.toFixed(0)}% of ${budget} budget
+                  {percentage.toFixed(0)}% of ${category.budget} budget
                 </span>
                 {isOverBudget ? (
                   <span className="budget-status over">
-                    Over by ${(total - budget).toFixed(2)}
+                    Over by ${(category.total - category.budget).toFixed(2)}
                   </span>
                 ) : (
                   <span className="budget-status under">
-                    Under by ${(budget - total).toFixed(2)}
+                    Under by ${(category.budget - category.total).toFixed(2)}
                   </span>
                 )}
               </div>
 
-              {category === "Transport" && (
+              {/* Display the AI-generated insight for each category */}
+              {category.insight && (
                 <div className="category-insight">
-                  💡 If you save $10 per fill, that's about $100 a year
+                  {category.insight}
                 </div>
               )}
             </div>
