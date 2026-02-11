@@ -6,13 +6,12 @@ import GroceryComparison from './pages/GroceryComparison/GroceryComparison';
 import InsightPopup from './components/InsightPopup/InsightPopup';
 import ChatWidget from './components/ChatWidget/ChatWidget';
 import BottomNav from './components/BottomNav/BottomNav';
-import { getSessionId } from './utils/session';
 import './App.css';
 
 const N8N_WEBHOOK_URL = "https://cee-wee.app.n8n.cloud/webhook-test/savie-form";
 
 function App() {
-  const [sessionId] = useState(getSessionId());
+  const sessionId = 1
   const [isOnboarding, setIsOnboarding] = useState(true);
   const [showInsightPopup, setShowInsightPopup] = useState(false);
   const [initialInsight, setInitialInsight] = useState("");

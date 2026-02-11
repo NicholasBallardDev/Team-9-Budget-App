@@ -1,4 +1,3 @@
-import { getCategoryTotals } from '../../utils/mockData';
 import './FinancialOverview.css';
 
 function FinancialOverview({ insights, onNavigate }) {
@@ -24,7 +23,7 @@ function FinancialOverview({ insights, onNavigate }) {
           <div className="quick-action-title">Find Deals</div>
         </button>
       </div> */}
-
+      <h1>hi</h1>
       {/* Category Breakdown */}
       <div className="category-section">
         <h2 className="section-title">Where your money goes</h2>
