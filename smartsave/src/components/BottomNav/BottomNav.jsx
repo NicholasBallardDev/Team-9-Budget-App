@@ -23,11 +23,11 @@ function BottomNav() {
         <div className="bottom-nav-icon">🛒</div>
         <span>Groceries</span>
       </Link>
-
+{/* 
       <Link to="/aianalysis" className="bottom-nav-button">
         <div className="bottom-nav-icon">🤖</div>
         <span>AI</span>
-      </Link>
+      </Link> */}
     </nav>
   )
 }
