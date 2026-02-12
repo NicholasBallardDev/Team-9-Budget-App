@@ -6,6 +6,7 @@ import GroceryComparison from './pages/GroceryComparison/GroceryComparison';
 import InsightPopup from './components/InsightPopup/InsightPopup';
 import BottomNav from './components/BottomNav/BottomNav';
 import AIAnalysis from './pages/AIAnalysis/AIAnalysis';
+import GoalSetting from './pages/GoalSetting/GoalSetting';
 import './App.css';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 
@@ -177,6 +178,7 @@ function App() {
           <Route path="/fuel" element={<FuelPrices />} />
           <Route path="/groceries" element={<GroceryComparison />} />
           <Route path="/aianalysis" element={<AIAnalysis />} />
+          <Route path="/goals" element={<GoalSetting />} />
         </Routes>
         <BottomNav />
       </BrowserRouter>
