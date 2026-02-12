@@ -1,6 +1,7 @@
 import { useState } from "react"
 import "./GoalSetting.css"
 import GoalItem from "./components/GoalItem"
+import SavingsSummary from "./components/SavingsSummary"
 import "react-toastify/dist/ReactToastify.css"
 import { ToastContainer } from "react-toastify"
 import AIGoalSummary from "./components/AIGoalSummary"
@@ -84,6 +85,7 @@ function GoalSetting({ insights }) {
     },
   ])
   const [completedGoals, setCompletedGoals] = useState([])
+  const [weeklySavings, setWeeklySavings] = useState(0)
 
   // UI state flags
   const [showCompleted, setShowCompleted] = useState(false)
@@ -167,6 +169,7 @@ function GoalSetting({ insights }) {
 
   const handleDelete = (id) => {
     setGoals(goals.filter((goal) => goal.id !== id))
+    setCompletedGoals(completedGoals.filter((goal) => goal.id !== id))
   }
 
   const handleComplete = (id) => {
@@ -177,6 +180,10 @@ function GoalSetting({ insights }) {
         completed: true,
         completedAt: Date.now(),
       }
+      if (goalToComplete.expectedSavings) {
+        setWeeklySavings(weeklySavings + goalToComplete.expectedSavings)
+      }
+
       setCompletedGoals([...completedGoals, completedGoal])
       setGoals(goals.filter((goal) => goal.id !== id))
     }
@@ -197,6 +204,9 @@ function GoalSetting({ insights }) {
         <h1 className="goal-title">My Goals</h1>
         <p className="goal-subtitle">Track your financial goals</p>
       </div>
+
+      {/* Savings Summary */}
+      <SavingsSummary weeklySavings={weeklySavings} />
 
       <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
 
@@ -264,6 +274,40 @@ function GoalSetting({ insights }) {
           />
         ))}
       </div>
+
+      {/* Completed Goals Section */}
+      {completedGoals.length > 0 && (
+        <div className="completed-goals-section">
+          <button
+            className="toggle-completed-btn"
+            onClick={() => setShowCompleted(!showCompleted)}
+          >
+            {showCompleted ? "Hide" : "Show"} Completed Goals (
+            {completedGoals.length})
+          </button>
+          {showCompleted && (
+            <div className="goal-list">
+              {completedGoals
+                .sort((a, b) => b.completedAt - a.completedAt)
+                .map((goal) => (
+                  <GoalItem
+                    key={goal.id}
+                    goal={goal}
+                    isEditing={false} // Completed goals are not editable
+                    isExpanded={expandedGoalId === goal.id}
+                    onDelete={handleDelete}
+                    onToggleInsight={handleToggleInsight}
+                    // Pass empty functions for actions not applicable to completed goals
+                    onEdit={() => {}}
+                    onSave={() => {}}
+                    onCancel={() => {}}
+                    onComplete={() => {}}
+                  />
+                ))}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   )
 }

@@ -82,7 +82,7 @@ function GoalItem({
   // Default view (not editing)
   if (!isEditing) {
     return (
-      <div className="goal-item">
+      <div className={`goal-item ${goal.completed ? "completed" : ""}`}>
         <div className="goal-item-header">
           <div className="goal-item-title-row">
             <h3 className="goal-item-title">{goal.title}</h3>
@@ -125,31 +125,36 @@ function GoalItem({
         </div>
 
         <div className="goal-item-controls">
-          <button
-            className="goal-item-btn goal-item-btn-edit"
-            onClick={() => onEdit(goal.id)}
-            title="Edit goal"
-          >
-            {goal.description ? "📝" : "➕"}{" "}
-            {goal.description ? "Edit" : "Add Details"}
-          </button>
+          {!goal.completed && (
+            <>
+              <button
+                className="goal-item-btn goal-item-btn-edit"
+                onClick={() => onEdit(goal.id)}
+                title="Edit goal"
+              >
+                {goal.description ? "📝" : "➕"}{" "}
+                {goal.description ? "Edit" : "Add Details"}
+              </button>
 
-          <button
-            className="goal-item-btn goal-item-btn-insight"
-            onClick={() => onToggleInsight(goal.id)}
-            title="View AI insights"
-          >
-            💡 Insights
-          </button>
+              <button
+                className="goal-item-btn goal-item-btn-insight"
+                onClick={() => onToggleInsight(goal.id)}
+                title="View AI insights"
+              >
+                💡 Insights
+              </button>
 
-          <button
-            className="goal-item-btn goal-item-btn-complete"
-            onClick={() => onComplete(goal.id)}
-            title="Mark as completed"
-          >
-            ✓ Complete
-          </button>
+              <button
+                className="goal-item-btn goal-item-btn-complete"
+                onClick={() => onComplete(goal.id)}
+                title="Mark as completed"
+              >
+                ✓ Complete
+              </button>
+            </>
+          )}
 
+          {/* Delete is always available */}
           <button
             className="goal-item-btn goal-item-btn-delete"
             onClick={() => onDelete(goal.id)}

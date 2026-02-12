@@ -36,7 +36,7 @@ function AIGoalSummary({ onAddGoal, categories }) {
 
   const getIntroMessage = () => {
     if (!categories || categories.length === 0) {
-      return "Based on your profile, here are some quick, actionable goals to get you started."
+      return "Recently there has been a 50% increase in your spending for groceries and subscriptions lately. Lets help with that!"
     }
 
     // Find a high-spending, actionable category
