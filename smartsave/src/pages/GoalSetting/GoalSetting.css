@@ -43,7 +43,7 @@
 
 .goal-input:focus {
   outline: none;
-  border-color: #4CAF50;
+  border-color: #4caf50;
 }
 
 .goal-form-optional {
@@ -66,7 +66,7 @@
 .goal-input-savings:focus,
 .goal-input-date:focus {
   outline: none;
-  border-color: #4CAF50;
+  border-color: #4caf50;
 }
 
 .goal-submit-btn {
@@ -75,7 +75,7 @@
   font-size: 16px;
   font-weight: 600;
   color: white;
-  background: #4CAF50;
+  background: #4caf50;
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -102,6 +102,33 @@
   color: #999;
   padding: 40px 20px;
   font-size: 14px;
+}
+
+/* Completed Goal Item */
+.goal-item.completed {
+  background-color: #e8f5e9; /* Light green background */
+  border-left: 4px solid #4caf50; /* Green left border */
+}
+
+.goal-item.completed .goal-item-title {
+  text-decoration: line-through;
+  color: #555;
+}
+
+/* Completed Goals Section */
+.completed-goals-section {
+  margin-top: 32px;
+  border-top: 1px solid #eee;
+  padding-top: 24px;
+}
+
+.toggle-completed-btn {
+  background: none;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  padding: 8px 16px;
+  cursor: pointer;
+  margin-bottom: 16px;
 }
 
 /* Responsive Design */

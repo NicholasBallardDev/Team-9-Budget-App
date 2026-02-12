@@ -9,6 +9,11 @@ function BottomNav() {
         <span>Overview</span>
       </Link>
 
+      <Link to="/goals" className="bottom-nav-button">
+        <div className="bottom-nav-icon">🥅</div>
+        <span>Goals</span>
+      </Link>
+
       <Link to="/fuel" className="bottom-nav-button">
         <div className="bottom-nav-icon">⛽</div>
         <span>Fuel</span>
@@ -22,10 +27,6 @@ function BottomNav() {
       <Link to="/aianalysis" className="bottom-nav-button">
         <div className="bottom-nav-icon">🤖</div>
         <span>AI</span>
-      </Link>
-      <Link to="/goals" className="bottom-nav-button">
-        <div className="bottom-nav-icon">🥅</div>
-        <span>Goals</span>
       </Link>
     </nav>
   )

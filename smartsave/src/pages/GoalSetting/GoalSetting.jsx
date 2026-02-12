@@ -1,6 +1,10 @@
 import { useState } from "react"
 import "./GoalSetting.css"
 import GoalItem from "./components/GoalItem"
+import SavingsSummary from "./components/SavingsSummary"
+import "react-toastify/dist/ReactToastify.css"
+import { ToastContainer } from "react-toastify"
+import AIGoalSummary from "./components/AIGoalSummary"
 
 /**
  * Goal object structure:
@@ -17,7 +21,7 @@ import GoalItem from "./components/GoalItem"
  * }
  */
 
-function GoalSetting() {
+function GoalSetting({ insights }) {
   // Core data state
   const [goals, setGoals] = useState([
     {
@@ -81,6 +85,7 @@ function GoalSetting() {
     },
   ])
   const [completedGoals, setCompletedGoals] = useState([])
+  const [weeklySavings, setWeeklySavings] = useState(0)
 
   // UI state flags
   const [showCompleted, setShowCompleted] = useState(false)
@@ -127,6 +132,25 @@ function GoalSetting() {
   }
 
   /**
+   * Adds a pre-defined goal from the AI summary
+   */
+  const handleAddQuickGoal = (quickGoal) => {
+    const newGoal = {
+      id: Date.now().toString(),
+      title: quickGoal.title,
+      description: quickGoal.description || "",
+      expectedSavings: quickGoal.expectedSavings || null,
+      targetDate: null,
+      completed: false,
+      completedAt: null,
+      insight: null,
+      createdAt: Date.now(),
+    }
+
+    setGoals([...goals, newGoal])
+  }
+
+  /**
    * Handlers for GoalItem component
    */
   const handleEdit = (id) => {
@@ -145,6 +169,7 @@ function GoalSetting() {
 
   const handleDelete = (id) => {
     setGoals(goals.filter((goal) => goal.id !== id))
+    setCompletedGoals(completedGoals.filter((goal) => goal.id !== id))
   }
 
   const handleComplete = (id) => {
@@ -155,6 +180,10 @@ function GoalSetting() {
         completed: true,
         completedAt: Date.now(),
       }
+      if (goalToComplete.expectedSavings) {
+        setWeeklySavings(weeklySavings + goalToComplete.expectedSavings)
+      }
+
       setCompletedGoals([...completedGoals, completedGoal])
       setGoals(goals.filter((goal) => goal.id !== id))
     }
@@ -172,9 +201,20 @@ function GoalSetting() {
   return (
     <div className="goal-setting">
       <div className="goal-header">
-        <h1 className="goal-title">My john</h1>
+        <h1 className="goal-title">My Goals</h1>
         <p className="goal-subtitle">Track your financial goals</p>
       </div>
+
+      {/* Savings Summary */}
+      <SavingsSummary weeklySavings={weeklySavings} />
+
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
+
+      {/* AI Goal Summary */}
+      <AIGoalSummary
+        onAddGoal={handleAddQuickGoal}
+        categories={insights?.categories}
+      />
 
       {/* Goal Creation Form */}
       <div className="goal-form">
@@ -234,6 +274,40 @@ function GoalSetting() {
           />
         ))}
       </div>
+
+      {/* Completed Goals Section */}
+      {completedGoals.length > 0 && (
+        <div className="completed-goals-section">
+          <button
+            className="toggle-completed-btn"
+            onClick={() => setShowCompleted(!showCompleted)}
+          >
+            {showCompleted ? "Hide" : "Show"} Completed Goals (
+            {completedGoals.length})
+          </button>
+          {showCompleted && (
+            <div className="goal-list">
+              {completedGoals
+                .sort((a, b) => b.completedAt - a.completedAt)
+                .map((goal) => (
+                  <GoalItem
+                    key={goal.id}
+                    goal={goal}
+                    isEditing={false} // Completed goals are not editable
+                    isExpanded={expandedGoalId === goal.id}
+                    onDelete={handleDelete}
+                    onToggleInsight={handleToggleInsight}
+                    // Pass empty functions for actions not applicable to completed goals
+                    onEdit={() => {}}
+                    onSave={() => {}}
+                    onCancel={() => {}}
+                    onComplete={() => {}}
+                  />
+                ))}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   )
 }
