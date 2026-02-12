@@ -1,6 +1,9 @@
 import { useState } from "react"
 import "./GoalSetting.css"
 import GoalItem from "./components/GoalItem"
+import "react-toastify/dist/ReactToastify.css"
+import { ToastContainer } from "react-toastify"
+import AIGoalSummary from "./components/AIGoalSummary"
 
 /**
  * Goal object structure:
@@ -17,7 +20,7 @@ import GoalItem from "./components/GoalItem"
  * }
  */
 
-function GoalSetting() {
+function GoalSetting({ insights }) {
   // Core data state
   const [goals, setGoals] = useState([
     {
@@ -127,6 +130,25 @@ function GoalSetting() {
   }
 
   /**
+   * Adds a pre-defined goal from the AI summary
+   */
+  const handleAddQuickGoal = (quickGoal) => {
+    const newGoal = {
+      id: Date.now().toString(),
+      title: quickGoal.title,
+      description: quickGoal.description || "",
+      expectedSavings: quickGoal.expectedSavings || null,
+      targetDate: null,
+      completed: false,
+      completedAt: null,
+      insight: null,
+      createdAt: Date.now(),
+    }
+
+    setGoals([...goals, newGoal])
+  }
+
+  /**
    * Handlers for GoalItem component
    */
   const handleEdit = (id) => {
@@ -172,9 +194,17 @@ function GoalSetting() {
   return (
     <div className="goal-setting">
       <div className="goal-header">
-        <h1 className="goal-title">My john</h1>
+        <h1 className="goal-title">My Goals</h1>
         <p className="goal-subtitle">Track your financial goals</p>
       </div>
+
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
+
+      {/* AI Goal Summary */}
+      <AIGoalSummary
+        onAddGoal={handleAddQuickGoal}
+        categories={insights?.categories}
+      />
 
       {/* Goal Creation Form */}
       <div className="goal-form">

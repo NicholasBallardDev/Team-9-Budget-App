@@ -265,7 +265,7 @@ function App() {
           }
         />
         <Route path="/aianalysis" element={<AIAnalysis />} />
-        <Route path="/goals" element={<GoalSetting />} />
+        <Route path="/goals" element={<GoalSetting insights={insights} />} />
       </Routes>
       {location.pathname !== "/" && <BottomNav />}
     </div>
