@@ -13,7 +13,7 @@ import { Routes, Route, useLocation } from "react-router-dom"
 const N8N_FINANCIAL_WEBHOOK = "/api/n8n/webhook/savie-form"
 const N8N_FUEL_WEBHOOK = "/api/n8n/webhook/fuel-check"
 const N8N_GROCERY_WEBHOOK =
-  "https://cee-wee.app.n8n.cloud/webhook-test/grocery-comparison"
+  "/api/n8n/webhook/grocery-comparison"
 
 // Mock transaction data
 const MOCK_TRANSACTIONS = [

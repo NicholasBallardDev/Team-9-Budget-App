@@ -34,7 +34,7 @@ function GroceryComparison({ onNavigate, userPostcode, initialGroceryData }) {
 
     try {
       const response = await fetch(
-        "https://cee-wee.app.n8n.cloud/webhook-test/grocery-comparison",
+        "/api/n8n/webhook/grocery-comparison",
         {
           method: "POST",
           headers: {
