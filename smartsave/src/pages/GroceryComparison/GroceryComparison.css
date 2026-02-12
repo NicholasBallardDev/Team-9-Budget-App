@@ -276,7 +276,6 @@
   border-radius: 12px;
   margin-bottom: 10px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  border-left: 4px solid #f59e0b;
   border: 1px solid rgba(229, 231, 235, 0.5);
   border-left: 4px solid #f59e0b;
 }
@@ -313,7 +312,7 @@
   font-weight: 600;
 }
 
-/* Loading spinner */
+/* Loading State */
 .loading-container {
   display: flex;
   flex-direction: column;
@@ -324,14 +323,18 @@
   z-index: 2;
 }
 
-.loading-container .spinner {
-  font-size: 48px;
-  animation: bounce 0.6s ease-in-out infinite alternate;
+.grocery-cart-icon {
+  font-size: 64px;
+  animation: cartBounce 1s ease-in-out infinite;
 }
 
-@keyframes bounce {
-  0% { transform: translateY(0) scale(1); }
-  100% { transform: translateY(-20px) scale(1.1); }
+@keyframes cartBounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
 }
 
 .loading-container p {
@@ -361,5 +364,9 @@
   
   .grocery-comparison::after {
     font-size: 100px;
+  }
+  
+  .grocery-cart-icon {
+    font-size: 48px;
   }
 }

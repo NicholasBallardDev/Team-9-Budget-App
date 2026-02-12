@@ -169,26 +169,26 @@ function FuelPrices({ onNavigate, userPostcode }) {
   }
 
   if (loading) {
-    return (
-      <div className="fuel-prices">
-        <div className="fuel-header">
-          <div className="fuel-header-top">
-            <button
-              className="back-button"
-              onClick={() => onNavigate("overview")}
-            >
-              ←
-            </button>
-            <h2 className="fuel-title">⛽ Fuel prices around your suburb</h2>
-          </div>
-        </div>
-        <div className="loading-container">
-          <div className="spinner">⛽</div>
-          <p>Finding the cheapest fuel near you...</p>
+  return (
+    <div className="fuel-prices">
+      <div className="fuel-header">
+        <div className="fuel-header-top">
+          <button
+            className="back-button"
+            onClick={() => onNavigate("overview")}
+          >
+            ←
+          </button>
+          <h2 className="fuel-title">⛽ Fuel prices around your suburb</h2>
         </div>
       </div>
-    )
-  }
+      <div className="loading-container">
+        <div className="fuel-pump-icon">⛽</div>
+        <p>Finding the cheapest fuel near you...</p>
+      </div>
+    </div>
+  )
+}
 
   if (!fuelData) {
     return (
@@ -220,7 +220,7 @@ function FuelPrices({ onNavigate, userPostcode }) {
         {/* Mock data indicator */}
         {usingMockData && (
           <div className="mock-data-banner">
-            ℹ️ Showing sample data (API unavailable)
+            ℹ️ API taking longer than expected - displaying sample data
           </div>
         )}
 

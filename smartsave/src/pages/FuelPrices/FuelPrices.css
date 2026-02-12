@@ -383,7 +383,7 @@
   margin-top: 2px;
 }
 
-/* Loading state */
+/* Loading State */
 .loading-container {
   display: flex;
   flex-direction: column;
@@ -394,14 +394,17 @@
   z-index: 2;
 }
 
-.spinner {
-  font-size: 48px;
-  animation: spin 2s linear infinite;
+.fuel-pump-icon {
+  font-size: 64px;
+  animation: pumpBounce 1s ease-in-out infinite;
 }
 
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
+@keyframes pumpBounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
   }
 }
 
@@ -449,5 +452,9 @@
   
   .fuel-prices::after {
     font-size: 100px;
+  }
+  
+  .fuel-pump-icon {
+    font-size: 48px;
   }
 }

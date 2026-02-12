@@ -118,26 +118,26 @@ function GroceryComparison({ userPostcode, initialGroceryData }) {
   }
 
   if (loading) {
-    return (
-      <div className="grocery-comparison">
-        <div className="grocery-header">
-          <div className="grocery-header-top">
-            <button
-              className="back-button"
-              onClick={() => navigate("/overview")}
-            >
-              ←
-            </button>
-            <h2 className="grocery-title">🛒 Grocery Comparison</h2>
-          </div>
-        </div>
-        <div className="loading-container">
-          <div className="spinner">🛒</div>
-          <p>Finding the best grocery prices...</p>
+  return (
+    <div className="grocery-comparison">
+      <div className="grocery-header">
+        <div className="grocery-header-top">
+          <button
+            className="back-button"
+            onClick={() => navigate("/overview")}
+          >
+            ←
+          </button>
+          <h2 className="grocery-title">🛒 Grocery Comparison</h2>
         </div>
       </div>
-    )
-  }
+      <div className="loading-container">
+        <div className="grocery-cart-icon">🛒</div>  {/* Changed from spinner class */}
+        <p>Finding the best grocery prices...</p>
+      </div>
+    </div>
+  )
+}
 
   if (!groceryData) {
     return (
