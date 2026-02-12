@@ -165,6 +165,7 @@ function FuelPrices({ onNavigate, userPostcode }) {
       setError(error.message);
     } finally {
       setLoading(false);
+      hasFetchedRef.current = false;
     }
   };
 

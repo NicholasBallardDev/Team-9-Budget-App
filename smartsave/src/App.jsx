@@ -84,42 +84,41 @@ function App() {
       }
     }
 
-    // // Pre-load fuel data in background (non-blocking)
-    // fetch(N8N_FUEL_WEBHOOK, {
-    //   method: "POST",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify({
-    //     postcode: data.postcode,
-    //     fuelType: "U91",
-    //     sessionId: sessionId
-    //   })
-    // })
-    //   .then(res => res.json())
-    //   .then(fuelDataResponse => {
-    //     setFuelData(fuelDataResponse); // ADD THIS
-    //     localStorage.setItem('fuelData', JSON.stringify(fuelDataResponse));
-    //     console.log('✅ Fuel data pre-loaded:', fuelDataResponse);
-    //   })
-    //   .catch(err => console.log('⚠️ Fuel pre-load failed (non-critical):', err));
+    // Pre-load fuel data in background (non-blocking)
+    fetch(N8N_FUEL_WEBHOOK, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        postcode: data.postcode,
+        fuelType: "U91",
+        sessionId: sessionId
+      })
+    })
+      .then(res => res.json())
+      .then(fuelDataResponse => {
+        setFuelData(fuelDataResponse); // ADD THIS
+        localStorage.setItem('fuelData', JSON.stringify(fuelDataResponse));
+        console.log('✅ Fuel data pre-loaded:', fuelDataResponse);
+      })
+      .catch(err => console.log('⚠️ Fuel pre-load failed (non-critical):', err));
 
-    // // Pre-load grocery data in background (ADD THIS WHOLE BLOCK)
-    // //n8n integration
-    // fetch(N8N_GROCERY_WEBHOOK, {
-    //   method: "POST",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify({
-    //     postcode: data.postcode,
-    //     weeklyBudget: 300,
-    //     sessionId: sessionId
-    //   })
-    // })
-    //   .then(res => res.json())
-    //   .then(groceryDataResponse => {
-    //     setGroceryData(groceryDataResponse);
-    //     localStorage.setItem('groceryData', JSON.stringify(groceryDataResponse));
-    //     console.log('✅ Grocery data pre-loaded:', groceryDataResponse);
-    //   })
-    //   .catch(err => console.log('⚠️ Grocery pre-load failed (non-critical):', err));
+    // Pre-load grocery data in background (ADD THIS WHOLE BLOCK)
+    fetch(N8N_GROCERY_WEBHOOK, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        postcode: data.postcode,
+        weeklyBudget: 300,
+        sessionId: sessionId
+      })
+    })
+      .then(res => res.json())
+      .then(groceryDataResponse => {
+        setGroceryData(groceryDataResponse);
+        localStorage.setItem('groceryData', JSON.stringify(groceryDataResponse));
+        console.log('✅ Grocery data pre-loaded:', groceryDataResponse);
+      })
+      .catch(err => console.log('⚠️ Grocery pre-load failed (non-critical):', err));
 
   } catch (error) {
     console.error("Error submitting to N8N:", error);
