@@ -1,12 +1,45 @@
+import { useState, useEffect } from 'react';
 import './FinancialOverview.css';
 
 function FinancialOverview({ insights, onNavigate }) {
-  // Safety check - if no insights, show loading or error
+  const [messageIndex, setMessageIndex] = useState(0);
+  
+  const loadingMessages = [
+    "Loading...",
+    "Hang on tight...",
+    "Crunching the numbers...",
+    "Making magic happen..."
+  ];
+
+  useEffect(() => {
+    if (!insights) {
+      const interval = setInterval(() => {
+        setMessageIndex((prev) => (prev + 1) % loadingMessages.length);
+      }, 1500); // Change message every 1.5 seconds
+
+      return () => clearInterval(interval);
+    }
+  }, [insights]);
+
+  // Safety check - if no insights, show playful loading
   if (!insights) {
     return (
       <div className="financial-overview">
-        <div className="overview-header">
-          <h1>Loading your insights...</h1>
+        <div className="playful-loading">
+          {/* Bouncing Money Bag */}
+          <div className="bouncing-money-bag">
+            <div className="money-bag-icon">💰</div>
+          </div>
+          
+          {/* Rotating Messages */}
+          <h1 className="loading-message">{loadingMessages[messageIndex]}</h1>
+          
+          {/* Progress dots */}
+          <div className="loading-dots">
+            <div className="dot dot-1"></div>
+            <div className="dot dot-2"></div>
+            <div className="dot dot-3"></div>
+          </div>
         </div>
       </div>
     );

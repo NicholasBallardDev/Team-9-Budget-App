@@ -1,7 +1,7 @@
 .grocery-comparison {
   padding: 16px;
   padding-bottom: 80px;
-  max-width: 600px;
+  max-width: 100%;
   margin: 0 auto;
   min-height: 100vh;
   background: linear-gradient(135deg, #e9d5ff 0%, #d8b4fe 100%);
