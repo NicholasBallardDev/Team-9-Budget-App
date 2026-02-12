@@ -1,95 +1,68 @@
-/* Fix the insight banner spacing */
-.fuel-insight-banner {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  padding: 15px 20px;
-  border-radius: 12px;
-  margin: 15px 0;
-  text-align: center;
-  font-size: 16px;
-  font-weight: 500;
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+.fuel-prices {
+  padding: 16px;
+  padding-bottom: 80px;
+  max-width: 600px;
+  margin: 0 auto;
+  min-height: 100vh;
+  position: relative;
+  z-index: 1;
 }
 
-/* Better station card layout */
-.station-card {
+.fuel-header {
+  margin-bottom: 16px;
+  animation: fuelSlideDown 0.4s ease-out;
+}
+
+@keyframes fuelSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fuel-header-top {
   display: flex;
   align-items: center;
-  gap: 15px;
-  padding: 16px;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.back-button {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
   background: white;
-  border-radius: 12px;
-  margin-bottom: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.station-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-}
-
-.station-card.best {
-  border: 2px solid #10b981;
-  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
-}
-
-.best-badge {
-  position: absolute;
-  top: -8px;
-  right: 12px;
-  background: #10b981;
-  color: white;
-  padding: 4px 12px;
-  border-radius: 12px;
-  font-size: 12px;
-  font-weight: 600;
-}
-
-/* Station info */
-.station-info {
-  flex: 1;
-}
-
-.station-name {
-  font-weight: 600;
-  font-size: 15px;
-  color: #1f2937;
-  margin-bottom: 4px;
-}
-
-.station-address {
-  font-size: 13px;
   color: #6b7280;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
 }
 
-/* Price display */
-.station-price {
-  text-align: right;
-  min-width: 100px;
+.back-button:hover {
+  background: #f9fafb;
 }
 
-.price-value {
+.fuel-title {
   font-size: 24px;
   font-weight: 700;
-  color: #1f2937;
+  color: #1a1a1a;
+  margin: 0;
 }
 
-.price-value.best {
-  color: #10b981;
-}
-
-.price-unit {
-  font-size: 11px;
-  color: #9ca3af;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.price-diff {
-  font-size: 12px;
-  color: #ef4444;
-  margin-top: 4px;
+.fuel-location {
+  text-align: center;
+  color: #6b7280;
+  font-size: 14px;
+  margin: 4px 0 12px 0;
 }
 
 /* Fuel type selector */
@@ -124,17 +97,17 @@
   color: white;
 }
 
-/* Best price banner */
-.best-price-banner {
-  background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
-  border: 2px solid #10b981;
-  color: #065f46;
-  padding: 14px 20px;
+/* AI Insight banner */
+.fuel-insight-banner {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 15px 20px;
   border-radius: 12px;
-  margin: 15px 0;
+  margin: 12px 0;
   text-align: center;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 500;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 }
 
 /* Rewards card */
@@ -142,8 +115,20 @@
   background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
   padding: 16px;
   border-radius: 12px;
-  margin: 15px 0;
+  margin: 12px 0;
   border: 2px solid #fb923c;
+  animation: rewardsSlideUp 0.5s ease-out;
+}
+
+@keyframes rewardsSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .rewards-header {
@@ -183,6 +168,13 @@
   height: 100%;
   background: #ea580c;
   transition: width 0.3s ease;
+  animation: rewardsProgressFill 1s ease-out;
+}
+
+@keyframes rewardsProgressFill {
+  from {
+    width: 0 !important;
+  }
 }
 
 .rewards-message {
@@ -191,48 +183,127 @@
   margin: 0;
 }
 
-/* Update FuelPrices.css - reduce spacing */
-
-.fuel-prices {
-  padding: 16px;
-  padding-bottom: 80px;
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-.fuel-header {
-  margin-bottom: 16px;
-}
-
-.fuel-location {
-  margin: 4px 0 12px 0;
-}
-
-/* Tighter section spacing */
-.fuel-insight-banner {
-  margin: 12px 0;
-}
-
-.rewards-card {
-  margin: 12px 0;
-}
-
+/* Best price banner */
 .best-price-banner {
+  background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+  border: 2px solid #10b981;
+  color: #065f46;
+  padding: 14px 20px;
+  border-radius: 12px;
   margin: 12px 0;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 500;
 }
 
+/* Stations section */
 .stations-section {
   margin-top: 16px;
 }
 
 .stations-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1f2937;
   margin-bottom: 12px;
 }
 
-/* Tighter card spacing */
+/* Station cards */
 .station-card {
-  margin-bottom: 10px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 15px;
   padding: 14px;
+  background: white;
+  border-radius: 12px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s, box-shadow 0.2s;
+  animation: stationSlideUp 0.5s ease-out backwards;
+}
+
+.station-card:nth-child(1) { animation-delay: 0.6s; }
+.station-card:nth-child(2) { animation-delay: 0.7s; }
+.station-card:nth-child(3) { animation-delay: 0.8s; }
+.station-card:nth-child(4) { animation-delay: 0.9s; }
+.station-card:nth-child(5) { animation-delay: 1s; }
+
+@keyframes stationSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.station-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.station-card.best {
+  border: 2px solid #10b981;
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+}
+
+.best-badge {
+  position: absolute;
+  top: -8px;
+  right: 12px;
+  background: #10b981;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.station-info {
+  flex: 1;
+}
+
+.station-name {
+  font-weight: 600;
+  font-size: 15px;
+  color: #1f2937;
+  margin-bottom: 4px;
+}
+
+.station-address {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.station-price {
+  text-align: right;
+  min-width: 100px;
+}
+
+.price-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.price-value.best {
+  color: #10b981;
+}
+
+.price-unit {
+  font-size: 11px;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.price-diff {
+  font-size: 12px;
+  color: #ef4444;
+  margin-top: 4px;
 }
 
 /* Loading state */
@@ -251,7 +322,6 @@
   margin: 0;
 }
 
-/* Spinner animation */
 .spinner {
   font-size: 48px;
   animation: bounce 0.6s ease-in-out infinite alternate;
