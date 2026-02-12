@@ -6,9 +6,9 @@ export default defineConfig({
   server: {
     proxy: {
       '/api/n8n': {
-        target: 'https://cee-wee.app.n8n.cloud',
+        target: 'https://cee-wee.app.n8n.cloud/',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api\/n8n/, '')
+        rewrite: (path) => path.replace('/^/api/n8n/', '')
       }
     }
   }

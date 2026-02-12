@@ -179,7 +179,7 @@ function AIOverview({ formData, onNavigate }) {
     return (
       <div className="ai-overview">
         <div className="overview-header">
-          <button className="back-button" onClick={() => onNavigate("overview")}>←</button>
+          {/* <button className="back-button" onClick={() => onNavigate("overview")}>←</button> */}
           <h1 className="overview-title">🤖 AI Financial Overview</h1>
         </div>
         <div className="loading-state">
@@ -194,7 +194,7 @@ function AIOverview({ formData, onNavigate }) {
     return (
       <div className="ai-overview">
         <div className="overview-header">
-          <button className="back-button" onClick={() => onNavigate("overview")}>←</button>
+          {/* <button className="back-button" onClick={() => onNavigate("overview")}>←</button> */}
           <h1 className="overview-title">🤖 AI Financial Overview</h1>
         </div>
         <div className="error-state">
