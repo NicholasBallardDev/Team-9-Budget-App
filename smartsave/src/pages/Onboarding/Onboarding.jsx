@@ -1,10 +1,12 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import ProgressBar from '../../components/ProgressBar/ProgressBar';
 import './Onboarding.css';
 
 function Onboarding({ onComplete, isLoading }) {
   const [showLanding, setShowLanding] = useState(true);
   const [currentQuestion, setCurrentQuestion] = useState(0);
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
     financialGoal: "",
@@ -51,6 +53,7 @@ function Onboarding({ onComplete, isLoading }) {
       setCurrentQuestion(currentQuestion + 1);
     } else {
       onComplete(formData);
+      navigate('/overview');
     }
   };
 

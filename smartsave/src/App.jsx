@@ -6,8 +6,9 @@ import GroceryComparison from './pages/GroceryComparison/GroceryComparison';
 import InsightPopup from './components/InsightPopup/InsightPopup';
 import BottomNav from './components/BottomNav/BottomNav';
 import AIAnalysis from './pages/AIAnalysis/AIAnalysis';
+import GoalSetting from './pages/GoalSetting/GoalSetting';
 import './App.css';
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 
 const N8N_FINANCIAL_WEBHOOK = "/api/n8n/webhook/savie-form";
 const N8N_FUEL_WEBHOOK = "/api/n8n/webhook/fuel-check";
@@ -38,11 +39,10 @@ function getSessionId() {
 }
 
 function App() {
+  const location = useLocation();
   const [sessionId] = useState(getSessionId());
-  const [isOnboarding, setIsOnboarding] = useState(false);
   const [showInsightPopup, setShowInsightPopup] = useState(false);
   const [initialInsight, setInitialInsight] = useState("");
-  const [currentPage, setCurrentPage] = useState("overview");
   const [formData, setFormData] = useState(null);
   const [insights, setInsights] = useState(null);
   const [loadingInsights, setLoadingInsights] = useState(false);
@@ -84,42 +84,41 @@ function App() {
       }
     }
 
-    // // Pre-load fuel data in background (non-blocking)
-    // fetch(N8N_FUEL_WEBHOOK, {
-    //   method: "POST",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify({
-    //     postcode: data.postcode,
-    //     fuelType: "U91",
-    //     sessionId: sessionId
-    //   })
-    // })
-    //   .then(res => res.json())
-    //   .then(fuelDataResponse => {
-    //     setFuelData(fuelDataResponse); // ADD THIS
-    //     localStorage.setItem('fuelData', JSON.stringify(fuelDataResponse));
-    //     console.log('✅ Fuel data pre-loaded:', fuelDataResponse);
-    //   })
-    //   .catch(err => console.log('⚠️ Fuel pre-load failed (non-critical):', err));
+    // Pre-load fuel data in background (non-blocking)
+    fetch(N8N_FUEL_WEBHOOK, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        postcode: data.postcode,
+        fuelType: "U91",
+        sessionId: sessionId
+      })
+    })
+      .then(res => res.json())
+      .then(fuelDataResponse => {
+        setFuelData(fuelDataResponse); // ADD THIS
+        localStorage.setItem('fuelData', JSON.stringify(fuelDataResponse));
+        console.log('✅ Fuel data pre-loaded:', fuelDataResponse);
+      })
+      .catch(err => console.log('⚠️ Fuel pre-load failed (non-critical):', err));
 
-    // // Pre-load grocery data in background (ADD THIS WHOLE BLOCK)
-    // //n8n integration
-    // fetch(N8N_GROCERY_WEBHOOK, {
-    //   method: "POST",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify({
-    //     postcode: data.postcode,
-    //     weeklyBudget: 300,
-    //     sessionId: sessionId
-    //   })
-    // })
-    //   .then(res => res.json())
-    //   .then(groceryDataResponse => {
-    //     setGroceryData(groceryDataResponse);
-    //     localStorage.setItem('groceryData', JSON.stringify(groceryDataResponse));
-    //     console.log('✅ Grocery data pre-loaded:', groceryDataResponse);
-    //   })
-    //   .catch(err => console.log('⚠️ Grocery pre-load failed (non-critical):', err));
+    // Pre-load grocery data in background (ADD THIS WHOLE BLOCK)
+    fetch(N8N_GROCERY_WEBHOOK, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        postcode: data.postcode,
+        weeklyBudget: 300,
+        sessionId: sessionId
+      })
+    })
+      .then(res => res.json())
+      .then(groceryDataResponse => {
+        setGroceryData(groceryDataResponse);
+        localStorage.setItem('groceryData', JSON.stringify(groceryDataResponse));
+        console.log('✅ Grocery data pre-loaded:', groceryDataResponse);
+      })
+      .catch(err => console.log('⚠️ Grocery pre-load failed (non-critical):', err));
 
   } catch (error) {
     console.error("Error submitting to N8N:", error);
@@ -145,41 +144,31 @@ function App() {
 
   const closeInsightPopup = () => {
     setShowInsightPopup(false);
-    setIsOnboarding(false);
-    setCurrentPage("overview");
   };
 
   if (showInsightPopup) {
     return (
       <InsightPopup 
         insight={initialInsight} 
-        onClose={closeInsightPopup} 
-      />
-    );
-  }
-
-  if (isOnboarding) {
-    return (
-      <Onboarding 
-        onComplete={handleOnboardingComplete}
-        isLoading={false}
+        onClose={closeInsightPopup}
       />
     );
   }
 
   return (
     <div className="app">
-      <BrowserRouter>
-
-        {/* Routes */}
-        <Routes>
-          <Route path="/" element={<FinancialOverview />} />
-          <Route path="/fuel" element={<FuelPrices />} />
-          <Route path="/groceries" element={<GroceryComparison />} />
-          <Route path="/aianalysis" element={<AIAnalysis />} />
-        </Routes>
+      {/* Routes */}
+      <Routes>
+        <Route path="/" element={<Onboarding onComplete={handleOnboardingComplete} isLoading={loadingInsights} />} />
+        <Route path="/overview" element={<FinancialOverview insights={insights} />} />
+        <Route path="/fuel" element={<FuelPrices fuelData={fuelData} setFuelData={setFuelData} />} />
+        <Route path="/groceries" element={<GroceryComparison groceryData={groceryData} setGroceryData={setGroceryData} />} />
+        <Route path="/aianalysis" element={<AIAnalysis />} />
+        <Route path="/goals" element={<GoalSetting />} />
+      </Routes>
+      {location.pathname !== '/' && (
         <BottomNav />
-      </BrowserRouter>
+      )}
     </div>
   );
 }
