@@ -1,24 +1,6 @@
 import { useState } from "react"
 import "./GoalItem.css"
 
-/**
- * GoalItem Component
- *
- * Displays an individual goal with all its details and controls.
- * Supports multiple view modes: default, editing, expanded.
- *
- * Props:
- * - goal: Goal object with all fields
- * - isEditing: Boolean indicating if this goal is in edit mode
- * - isExpanded: Boolean indicating if AI insight panel is expanded
- * - isLoadingInsight: Boolean indicating if AI insight is being fetched
- * - onEdit: Function to enter edit mode
- * - onSave: Function to save all goal updates from the edit form
- * - onCancel: Function to cancel editing
- * - onDelete: Function to delete the goal
- * - onComplete: Function to mark goal as completed
- * - onToggleInsight: Function to expand/collapse AI insight panel
- */
 function GoalItem({
   goal,
   isEditing,
@@ -50,7 +32,6 @@ function GoalItem({
     onCancel()
   }
 
-  // Format target date for display
   const formatDate = (dateString) => {
     if (!dateString) return null
     const date = new Date(dateString)
@@ -61,7 +42,6 @@ function GoalItem({
     })
   }
 
-  // Check if target date is approaching (within 7 days)
   const isApproaching = () => {
     if (!goal.targetDate || goal.completed) return false
     const target = new Date(goal.targetDate)
@@ -71,7 +51,6 @@ function GoalItem({
     return diffDays >= 0 && diffDays <= 7
   }
 
-  // Check if target date is overdue
   const isOverdue = () => {
     if (!goal.targetDate || goal.completed) return false
     const target = new Date(goal.targetDate)
@@ -79,7 +58,6 @@ function GoalItem({
     return target < now
   }
 
-  // Default view (not editing)
   if (!isEditing) {
     return (
       <div className={`goal-item ${goal.completed ? "completed" : ""}`}>
@@ -122,37 +100,67 @@ function GoalItem({
               </span>
             </div>
           )}
+
+          {goal.description && (
+            <p className="goal-item-description">{goal.description}</p>
+          )}
         </div>
 
+        {/* Show mini insight preview ONLY when not expanded */}
+        {goal.insight && !isExpanded && (
+          <div className="goal-item-mini-insight" onClick={() => onToggleInsight(goal.id)}>
+            <span className="mini-insight-icon">💡</span>
+            <span className="mini-insight-text">
+              {goal.insight}
+            </span>
+          </div>
+        )}
+
         <div className="goal-item-controls">
-          {!goal.completed && (
-            <>
-              <button
-                className="goal-item-btn goal-item-btn-edit"
-                onClick={() => onEdit(goal.id)}
-                title="Edit goal"
-              >
-                {goal.description ? "📝" : "➕"}{" "}
-                {goal.description ? "Edit" : "Add Details"}
-              </button>
+          <button 
+            className="goal-item-btn goal-item-btn-edit"
+            onClick={() => onEdit(goal.id)}
+            title="Edit goal"
+          >
+            {goal.description ? '📝 Edit' : '➕ Add Details'}
+          </button>
 
-              <button
-                className="goal-item-btn goal-item-btn-insight"
-                onClick={() => onToggleInsight(goal.id)}
-                title="View AI insights"
-              >
-                💡 Insights
-              </button>
-
-              <button
-                className="goal-item-btn goal-item-btn-complete"
-                onClick={() => onComplete(goal.id)}
-                title="Mark as completed"
-              >
-                ✓ Complete
-              </button>
-            </>
+          {goal.insight && (
+            <button 
+              className="goal-item-btn goal-item-btn-insight has-insight"
+              onClick={() => onToggleInsight(goal.id)}
+              title={isExpanded ? "Hide insight" : "View full insight"}
+            >
+              💡 {isExpanded ? 'Hide' : 'View Full'}
+            </button>
           )}
+
+          {!goal.insight && !isLoadingInsight && (
+            <button 
+              className="goal-item-btn goal-item-btn-insight"
+              onClick={() => onToggleInsight(goal.id)}
+              title="Get AI insight"
+            >
+              💡 Get Insight
+            </button>
+          )}
+
+          {isLoadingInsight && (
+            <button 
+              className="goal-item-btn goal-item-btn-insight"
+              disabled
+            >
+              💡 Loading...
+            </button>
+          )}
+
+          <button 
+            className="goal-item-btn goal-item-btn-complete"
+            onClick={() => onComplete(goal.id)}
+            title="Mark as completed"
+          >
+            ✓ Complete
+          </button>
 
           {/* Delete is always available */}
           <button
@@ -164,23 +172,22 @@ function GoalItem({
           </button>
         </div>
 
-        {/* AI Insight Dropdown Panel */}
-        {isExpanded && (
+        {/* AI Insight Expanded Panel */}
+        {isExpanded && goal.insight && (
           <div className="goal-item-insight-panel">
-            {isLoadingInsight ? (
-              <div className="insight-loading">
-                <div className="loading-spinner"></div>
-                <p>Generating insights...</p>
+            <div className="insight-content">
+              <div className="insight-header">
+                <span className="insight-title">💡 Financial Insight</span>
+                <button 
+                  className="insight-close"
+                  onClick={() => onToggleInsight(goal.id)}
+                  title="Close"
+                >
+                  ✕
+                </button>
               </div>
-            ) : goal.insight ? (
-              <div className="insight-content">
-                <p>{goal.insight}</p>
-              </div>
-            ) : (
-              <div className="insight-error">
-                <p>No insight available yet.</p>
-              </div>
-            )}
+              <p>{goal.insight}</p>
+            </div>
           </div>
         )}
       </div>
@@ -248,4 +255,4 @@ function GoalItem({
   )
 }
 
-export default GoalItem
+export default GoalItem;

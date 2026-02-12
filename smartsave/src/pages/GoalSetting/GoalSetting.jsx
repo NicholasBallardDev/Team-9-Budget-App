@@ -99,19 +99,68 @@ function GoalSetting({ insights }) {
   const [newGoalTargetDate, setNewGoalTargetDate] = useState("")
 
   /**
-   * Creates a new goal with validation
-   * Requirements: 1.1, 1.2, 1.3
+   * Fetches AI insight for a specific goal
    */
-  const handleCreateGoal = () => {
-    // Validate title is non-empty and not whitespace-only
-    const trimmedTitle = newGoalTitle.trim()
+  const fetchInsightForGoal = async (goalId, goal) => {
+    setLoadingInsightId(goalId);
+    
+    try {
+      const income = formData?.income || 60000;
+      const monthlyExpenses = 3000;
+      
+      const response = await fetch('/api/n8n/webhook-test/goals', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          goalId: goal.id,
+          title: goal.title,
+          description: goal.description || '',
+          expectedSavings: goal.expectedSavings,
+          targetDate: goal.targetDate,
+          userProfile: {
+            income: income,
+            monthlyExpenses: monthlyExpenses
+          }
+        })
+      });
+      
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      console.log('✅ Insight received for goal:', goalId, data);
+      
+      setGoals(prevGoals => prevGoals.map(g => 
+        g.id === goalId ? { ...g, insight: data.insight } : g
+      ));
+      
+    } catch (error) {
+      console.error('❌ Error fetching insight for goal:', goalId, error);
+      
+      setGoals(prevGoals => prevGoals.map(g => 
+        g.id === goalId ? { 
+          ...g, 
+          insight: 'Unable to generate insight at this time. Click "Get Insight" to try again.' 
+        } : g
+      ));
+    } finally {
+      setLoadingInsightId(null);
+    }
+  };
+
+  /**
+   * Creates a new goal with validation and fetches AI insight
+   */
+  const handleCreateGoal = async () => {
+    const trimmedTitle = newGoalTitle.trim();
     if (!trimmedTitle) {
-      return // Prevent creation of invalid goals
+      return;
     }
 
-    // Generate unique ID
+    const newGoalId = Date.now().toString();
     const newGoal = {
-      id: Date.now().toString(),
+      id: newGoalId,
       title: trimmedTitle,
       description: "",
       expectedSavings: newGoalSavings ? parseFloat(newGoalSavings) : null,
@@ -122,33 +171,18 @@ function GoalSetting({ insights }) {
       createdAt: Date.now(),
     }
 
-    // Add to goals array
-    setGoals([...goals, newGoal])
+    setGoals([...goals, newGoal]);
 
-    // Clear input fields after creation
-    setNewGoalTitle("")
-    setNewGoalSavings("")
-    setNewGoalTargetDate("")
-  }
+    setNewGoalTitle('');
+    setNewGoalSavings('');
+    setNewGoalTargetDate('');
 
-  /**
-   * Adds a pre-defined goal from the AI summary
-   */
-  const handleAddQuickGoal = (quickGoal) => {
-    const newGoal = {
-      id: Date.now().toString(),
-      title: quickGoal.title,
-      description: quickGoal.description || "",
-      expectedSavings: quickGoal.expectedSavings || null,
-      targetDate: null,
-      completed: false,
-      completedAt: null,
-      insight: null,
-      createdAt: Date.now(),
+    const hasEnoughDetails = newGoal.expectedSavings && newGoal.targetDate;
+    
+    if (hasEnoughDetails) {
+      await fetchInsightForGoal(newGoalId, newGoal);
     }
-
-    setGoals([...goals, newGoal])
-  }
+  };
 
   /**
    * Handlers for GoalItem component
@@ -189,12 +223,17 @@ function GoalSetting({ insights }) {
     }
   }
 
-  const handleToggleInsight = (id) => {
+  const handleToggleInsight = async (id) => {
     if (expandedGoalId === id) {
       setExpandedGoalId(null)
     } else {
-      setExpandedGoalId(id)
-      // TODO: Fetch AI insight if not cached (Task 11)
+      setExpandedGoalId(id);
+      
+      const goal = goals.find(g => g.id === id);
+      
+      if (!goal.insight) {
+        await fetchInsightForGoal(id, goal);
+      }
     }
   }
 
