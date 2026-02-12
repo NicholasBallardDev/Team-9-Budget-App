@@ -1,26 +1,25 @@
+import { Link } from 'react-router-dom';
 import './BottomNav.css';
 
-function BottomNav({ currentPage, onNavigate }) {
+function BottomNav() {
   return (
     <nav className="bottom-nav">
       <button
-        className={`bottom-nav-button ${currentPage === "overview" ? "active" : ""}`}
-        onClick={() => onNavigate("overview")}
+        to="/"
+        className="bottom-nav-button"
       >
-        <div className="bottom-nav-icon">💰</div>
-        <span>Overview</span>
+        💰 Overview
       </button>
       
       <button
-        className={`bottom-nav-button ${currentPage === "fuel" ? "active" : ""}`}
-        onClick={() => onNavigate("fuel")}
+        className={`bottom-nav-button`}
       >
         <div className="bottom-nav-icon">⛽</div>
         <span>Fuel</span>
       </button>
       
       <button
-        className={`bottom-nav-button ${currentPage === "groceries" ? "active" : ""}`}
+        className={`bottom-nav-button`}
         onClick={() => onNavigate("groceries")}
       >
         <div className="bottom-nav-icon">🛒</div>
@@ -28,8 +27,7 @@ function BottomNav({ currentPage, onNavigate }) {
       </button>
 
       <button
-        className={`bottom-nav-button ${currentPage === "aianalysis" ? "active" : ""}`}
-        onClick={() => onNavigate("aianalysis")}
+        className={`bottom-nav-button`}
       >
         <div className="bottom-nav-icon">🤖</div>
         <span>AI</span>

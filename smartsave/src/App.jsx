@@ -7,6 +7,7 @@ import InsightPopup from './components/InsightPopup/InsightPopup';
 import BottomNav from './components/BottomNav/BottomNav';
 import AIAnalysis from './pages/AIAnalysis/AIAnalysis';
 import './App.css';
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 
 const N8N_FINANCIAL_WEBHOOK = "/api/n8n/webhook/savie-form";
 const N8N_FUEL_WEBHOOK = "/api/n8n/webhook/fuel-check";
@@ -38,7 +39,7 @@ function getSessionId() {
 
 function App() {
   const [sessionId] = useState(getSessionId());
-  const [isOnboarding, setIsOnboarding] = useState(true);
+  const [isOnboarding, setIsOnboarding] = useState(false);
   const [showInsightPopup, setShowInsightPopup] = useState(false);
   const [initialInsight, setInitialInsight] = useState("");
   const [currentPage, setCurrentPage] = useState("overview");
@@ -83,42 +84,42 @@ function App() {
       }
     }
 
-    // Pre-load fuel data in background (non-blocking)
-    fetch(N8N_FUEL_WEBHOOK, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        postcode: data.postcode,
-        fuelType: "U91",
-        sessionId: sessionId
-      })
-    })
-      .then(res => res.json())
-      .then(fuelDataResponse => {
-        setFuelData(fuelDataResponse); // ADD THIS
-        localStorage.setItem('fuelData', JSON.stringify(fuelDataResponse));
-        console.log('✅ Fuel data pre-loaded:', fuelDataResponse);
-      })
-      .catch(err => console.log('⚠️ Fuel pre-load failed (non-critical):', err));
+    // // Pre-load fuel data in background (non-blocking)
+    // fetch(N8N_FUEL_WEBHOOK, {
+    //   method: "POST",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify({
+    //     postcode: data.postcode,
+    //     fuelType: "U91",
+    //     sessionId: sessionId
+    //   })
+    // })
+    //   .then(res => res.json())
+    //   .then(fuelDataResponse => {
+    //     setFuelData(fuelDataResponse); // ADD THIS
+    //     localStorage.setItem('fuelData', JSON.stringify(fuelDataResponse));
+    //     console.log('✅ Fuel data pre-loaded:', fuelDataResponse);
+    //   })
+    //   .catch(err => console.log('⚠️ Fuel pre-load failed (non-critical):', err));
 
-    // Pre-load grocery data in background (ADD THIS WHOLE BLOCK)
-    //n8n integration
-    fetch(N8N_GROCERY_WEBHOOK, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        postcode: data.postcode,
-        weeklyBudget: 300,
-        sessionId: sessionId
-      })
-    })
-      .then(res => res.json())
-      .then(groceryDataResponse => {
-        setGroceryData(groceryDataResponse);
-        localStorage.setItem('groceryData', JSON.stringify(groceryDataResponse));
-        console.log('✅ Grocery data pre-loaded:', groceryDataResponse);
-      })
-      .catch(err => console.log('⚠️ Grocery pre-load failed (non-critical):', err));
+    // // Pre-load grocery data in background (ADD THIS WHOLE BLOCK)
+    // //n8n integration
+    // fetch(N8N_GROCERY_WEBHOOK, {
+    //   method: "POST",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify({
+    //     postcode: data.postcode,
+    //     weeklyBudget: 300,
+    //     sessionId: sessionId
+    //   })
+    // })
+    //   .then(res => res.json())
+    //   .then(groceryDataResponse => {
+    //     setGroceryData(groceryDataResponse);
+    //     localStorage.setItem('groceryData', JSON.stringify(groceryDataResponse));
+    //     console.log('✅ Grocery data pre-loaded:', groceryDataResponse);
+    //   })
+    //   .catch(err => console.log('⚠️ Grocery pre-load failed (non-critical):', err));
 
   } catch (error) {
     console.error("Error submitting to N8N:", error);
@@ -161,37 +162,24 @@ function App() {
     return (
       <Onboarding 
         onComplete={handleOnboardingComplete}
-        isLoading={loadingInsights}
+        isLoading={false}
       />
     );
   }
 
   return (
     <div className="app">
-      {currentPage === "overview" && (
-        <FinancialOverview 
-          insights={insights}
-          onNavigate={setCurrentPage}
-        />
-      )}
-      
-      {currentPage === "fuel" && (
-        <FuelPrices 
-          onNavigate={setCurrentPage} 
-          userPostcode={formData?.postcode}
-          initialFuelData={fuelData}
-        />
-      )}
-      
-      {currentPage === "groceries" && (
-        <GroceryComparison onNavigate={setCurrentPage} userPostcode={formData?.postcode} initialGroceryData={groceryData} />
-      )}
+      <BrowserRouter>
 
-      {currentPage === "aianalysis" && (
-        <AIAnalysis onNavigate={setCurrentPage} />
-      )}
-
-      <BottomNav currentPage={currentPage} onNavigate={setCurrentPage} />
+        {/* Routes */}
+        <Routes>
+          <Route path="/" element={<FinancialOverview />} />
+          <Route path="/fuel" element={<FuelPrices />} />
+          <Route path="/groceries" element={<GroceryComparison />} />
+          <Route path="/aianalysis" element={<AIAnalysis />} />
+        </Routes>
+      </BrowserRouter>
+      <BottomNav />
     </div>
   );
 }
