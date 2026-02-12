@@ -4,9 +4,10 @@ import FinancialOverview from './pages/FinancialOverview/FinancialOverview';
 import FuelPrices from './pages/FuelPrices/FuelPrices';
 import GroceryComparison from './pages/GroceryComparison/GroceryComparison';
 import InsightPopup from './components/InsightPopup/InsightPopup';
-import ChatWidget from './components/ChatWidget/ChatWidget';
 import BottomNav from './components/BottomNav/BottomNav';
+import AIAnalysis from './pages/AIAnalysis/AIAnalysis';
 import './App.css';
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 
 const N8N_FINANCIAL_WEBHOOK = "/api/n8n/webhook/savie-form";
 const N8N_FUEL_WEBHOOK = "/api/n8n/webhook/fuel-check";
@@ -38,7 +39,7 @@ function getSessionId() {
 
 function App() {
   const [sessionId] = useState(getSessionId());
-  const [isOnboarding, setIsOnboarding] = useState(true);
+  const [isOnboarding, setIsOnboarding] = useState(false);
   const [showInsightPopup, setShowInsightPopup] = useState(false);
   const [initialInsight, setInitialInsight] = useState("");
   const [currentPage, setCurrentPage] = useState("overview");
@@ -47,7 +48,6 @@ function App() {
   const [loadingInsights, setLoadingInsights] = useState(false);
   const [fuelData, setFuelData] = useState(null);
   const [groceryData, setGroceryData] = useState(null);
-
   const handleOnboardingComplete = async (data) => {
   setLoadingInsights(true);
   setFormData(data);
@@ -161,34 +161,24 @@ function App() {
     return (
       <Onboarding 
         onComplete={handleOnboardingComplete}
-        isLoading={loadingInsights}
+        isLoading={false}
       />
     );
   }
 
   return (
     <div className="app">
-      {currentPage === "overview" && (
-        <FinancialOverview 
-          insights={insights}
-          onNavigate={setCurrentPage}
-        />
-      )}
-      
-      {currentPage === "fuel" && (
-        <FuelPrices 
-          onNavigate={setCurrentPage} 
-          userPostcode={formData?.postcode}
-          initialFuelData={fuelData}
-        />
-      )}
-      
-      {currentPage === "groceries" && (
-        <GroceryComparison onNavigate={setCurrentPage} userPostcode={formData?.postcode} initialGroceryData={groceryData} />
-      )}
+      <BrowserRouter>
 
-      <ChatWidget />
-      <BottomNav currentPage={currentPage} onNavigate={setCurrentPage} />
+        {/* Routes */}
+        <Routes>
+          <Route path="/" element={<FinancialOverview />} />
+          <Route path="/fuel" element={<FuelPrices />} />
+          <Route path="/groceries" element={<GroceryComparison />} />
+          <Route path="/aianalysis" element={<AIAnalysis />} />
+        </Routes>
+        <BottomNav />
+      </BrowserRouter>
     </div>
   );
 }
