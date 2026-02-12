@@ -1,11 +1,57 @@
 import { useState, useEffect, useRef } from "react"
+import { useNavigate } from "react-router-dom"
 import "./GroceryComparison.css"
+import { ToastContainer, toast } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
 
-function GroceryComparison({ onNavigate, userPostcode, initialGroceryData }) {
+const DUMMY_GROCERY_DATA = {
+  locationName: "Sydney CBD",
+  insight:
+    "You could save up to $25 this week by switching from Coles to Aldi for your main shop.",
+  weeklySavings: 25.35,
+  monthlySavings: 101.4,
+  storeComparison: [
+    {
+      store: "Aldi",
+      total: 112.5,
+      nearbyLocations: ["George St", "World Square"],
+      color: "#00509A",
+    },
+    {
+      store: "Woolworths",
+      total: 128.75,
+      nearbyLocations: ["Town Hall", "Metcentre"],
+      color: "#178841",
+    },
+    {
+      store: "Coles",
+      total: 137.85,
+      nearbyLocations: ["Wynyard", "World Square"],
+      color: "#E52421",
+    },
+  ],
+  topDeals: [
+    {
+      item: "1kg Beef Mince",
+      cheapestStore: "Aldi",
+      price: 12.0,
+      savings: 4.5,
+    },
+    { item: "2L Milk", cheapestStore: "Woolworths", price: 3.1, savings: 0.4 },
+    {
+      item: "Avocados (2-pack)",
+      cheapestStore: "Aldi",
+      price: 3.5,
+      savings: 1.5,
+    },
+  ],
+}
+
+function GroceryComparison({ userPostcode, initialGroceryData }) {
   const [groceryData, setGroceryData] = useState(initialGroceryData)
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(null)
   const hasFetchedRef = useRef(false)
+  const navigate = useNavigate()
 
   const postcode =
     userPostcode || localStorage.getItem("userPostcode") || "2000"
@@ -30,23 +76,19 @@ function GroceryComparison({ onNavigate, userPostcode, initialGroceryData }) {
   const fetchGroceryData = async () => {
     console.log("Fetching grocery data...")
     setLoading(true)
-    setError(null)
 
     try {
-      const response = await fetch(
-        "/api/n8n/webhook/grocery-comparison",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            postcode: postcode,
-            weeklyBudget: 300,
-            sessionId: localStorage.getItem("sessionId") || "demo-session",
-          }),
+      const response = await fetch("/api/n8n/webhook/grocery-comparison", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
         },
-      )
+        body: JSON.stringify({
+          postcode: postcode,
+          weeklyBudget: 300,
+          sessionId: localStorage.getItem("sessionId") || "demo-session",
+        }),
+      })
 
       console.log("Response status:", response.status)
 
@@ -66,7 +108,10 @@ function GroceryComparison({ onNavigate, userPostcode, initialGroceryData }) {
       setGroceryData(data)
     } catch (error) {
       console.error("❌ Error fetching grocery data:", error)
-      setError(error.message)
+      toast.warn(
+        "Could not fetch live data. Displaying sample information instead.",
+      )
+      setGroceryData(DUMMY_GROCERY_DATA)
     } finally {
       setLoading(false)
     }
@@ -79,7 +124,7 @@ function GroceryComparison({ onNavigate, userPostcode, initialGroceryData }) {
           <div className="grocery-header-top">
             <button
               className="back-button"
-              onClick={() => onNavigate("overview")}
+              onClick={() => navigate("/overview")}
             >
               ←
             </button>
@@ -89,27 +134,6 @@ function GroceryComparison({ onNavigate, userPostcode, initialGroceryData }) {
         <div className="loading-container">
           <div className="spinner">🛒</div>
           <p>Finding the best grocery prices...</p>
-        </div>
-      </div>
-    )
-  }
-
-  if (error) {
-    return (
-      <div className="grocery-comparison">
-        <div className="grocery-header">
-          <div className="grocery-header-top">
-            <button
-              className="back-button"
-              onClick={() => onNavigate("overview")}
-            >
-              ←
-            </button>
-            <h2 className="grocery-title">🛒 Grocery Comparison</h2>
-          </div>
-        </div>
-        <div style={{ padding: "20px", textAlign: "center", color: "red" }}>
-          Error: {error}
         </div>
       </div>
     )
@@ -127,13 +151,11 @@ function GroceryComparison({ onNavigate, userPostcode, initialGroceryData }) {
 
   return (
     <div className="grocery-comparison">
+      <ToastContainer position="top-center" autoClose={5000} hideProgressBar />
       {/* Header */}
       <div className="grocery-header">
         <div className="grocery-header-top">
-          <button
-            className="back-button"
-            onClick={() => onNavigate("overview")}
-          >
+          <button className="back-button" onClick={() => navigate("/overview")}>
             ←
           </button>
           <h2 className="grocery-title">🛒 Grocery Comparison</h2>
