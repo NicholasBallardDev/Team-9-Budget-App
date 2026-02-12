@@ -19,6 +19,30 @@ function Onboarding({ onComplete, isLoading }) {
   });
   const totalQuestions = 6;
 
+  // Bank data with logos (using SVG data URLs for portability)
+  const banks = [
+    {
+      name: "CommBank",
+      value: "commbank",
+      logo: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect fill='%23FFCC00' width='100' height='100'/%3E%3Ctext x='50' y='60' font-family='Arial' font-size='40' font-weight='bold' fill='%23000' text-anchor='middle'%3ECBA%3C/text%3E%3C/svg%3E"
+    },
+    {
+      name: "ANZ",
+      value: "anz",
+      logo: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect fill='%23007DBB' width='100' height='100'/%3E%3Ctext x='50' y='60' font-family='Arial' font-size='36' font-weight='bold' fill='%23FFF' text-anchor='middle'%3EANZ%3C/text%3E%3C/svg%3E"
+    },
+    {
+      name: "Westpac",
+      value: "westpac",
+      logo: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect fill='%23DA1710' width='100' height='100'/%3E%3Ctext x='50' y='55' font-family='Arial' font-size='24' font-weight='bold' fill='%23FFF' text-anchor='middle'%3EWEST%3C/text%3E%3Ctext x='50' y='75' font-family='Arial' font-size='24' font-weight='bold' fill='%23FFF' text-anchor='middle'%3EPAC%3C/text%3E%3C/svg%3E"
+    },
+    {
+      name: "NAB",
+      value: "nab",
+      logo: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect fill='%23E30000' width='100' height='100'/%3E%3Ctext x='50' y='60' font-family='Arial' font-size='36' font-weight='bold' fill='%23FFF' text-anchor='middle'%3ENAB%3C/text%3E%3C/svg%3E"
+    }
+  ];
+
   const handleStartOnboarding = () => {
     setShowLanding(false);
   };
@@ -127,7 +151,7 @@ function Onboarding({ onComplete, isLoading }) {
 
   // Onboarding Questions View
   return (
-    <div className="onboarding">
+    <div className={`onboarding question-${currentQuestion}`}>
       {/* Header */}
       <div className="onboarding-header">
         <div className="app-logo">SS</div>
@@ -166,13 +190,21 @@ function Onboarding({ onComplete, isLoading }) {
                 className={`option-button ${formData.financialGoal === "budgeting" ? "active" : ""}`}
                 onClick={() => setFormData({ ...formData, financialGoal: "budgeting" })}
               >
-                Budgeting - Track and control spending
+                <span className="option-icon">📊</span>
+                <span className="option-content">
+                  <strong>Budgeting</strong>
+                  <span className="option-description">Track and control spending</span>
+                </span>
               </button>
               <button
                 className={`option-button ${formData.financialGoal === "saving" ? "active" : ""}`}
                 onClick={() => setFormData({ ...formData, financialGoal: "saving" })}
               >
-                Saving - Build towards a goal
+                <span className="option-icon">🎯</span>
+                <span className="option-content">
+                  <strong>Saving</strong>
+                  <span className="option-description">Build towards a goal</span>
+                </span>
               </button>
             </div>
           </div>
@@ -244,14 +276,15 @@ function Onboarding({ onComplete, isLoading }) {
             <h2 className="question-title">Connect your bank</h2>
             <p className="question-subtitle">Select your bank to analyze your spending (using demo data)</p>
 
-            <div className="options-grid">
-              {["CommBank", "ANZ", "Westpac", "NAB"].map(bank => (
+            <div className="options-grid bank-grid">
+              {banks.map(bank => (
                 <button
-                  key={bank}
-                  className={`option-button ${formData.bank === bank.toLowerCase() ? "active" : ""}`}
-                  onClick={() => setFormData({ ...formData, bank: bank.toLowerCase() })}
+                  key={bank.value}
+                  className={`option-button bank-option ${formData.bank === bank.value ? "active" : ""}`}
+                  onClick={() => setFormData({ ...formData, bank: bank.value })}
                 >
-                  {bank}
+                  <img src={bank.logo} alt={bank.name} className="bank-logo" />
+                  <span className="bank-name">{bank.name}</span>
                 </button>
               ))}
             </div>

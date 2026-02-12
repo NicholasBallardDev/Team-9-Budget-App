@@ -205,15 +205,194 @@
   background: #f5f5f0;
   display: flex;
   flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Themed Backgrounds for Each Question */
+.onboarding.question-0 {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+}
+
+.onboarding.question-0::before {
+  content: "👋";
+  position: absolute;
+  font-size: 120px;
+  opacity: 0.1;
+  top: 15%;
+  right: 10%;
+  animation: wave 3s ease-in-out infinite;
+}
+
+.onboarding.question-0::after {
+  content: "✨";
+  position: absolute;
+  font-size: 80px;
+  opacity: 0.15;
+  bottom: 20%;
+  left: 8%;
+  animation: sparkle 2s ease-in-out infinite;
+}
+
+@keyframes wave {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(15deg); }
+}
+
+@keyframes sparkle {
+  0%, 100% { opacity: 0.15; transform: scale(1); }
+  50% { opacity: 0.25; transform: scale(1.1); }
+}
+
+.onboarding.question-1 {
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+}
+
+.onboarding.question-1::before {
+  content: "🎯";
+  position: absolute;
+  font-size: 100px;
+  opacity: 0.1;
+  top: 20%;
+  right: 12%;
+  animation: pulse 3s ease-in-out infinite;
+}
+
+.onboarding.question-1::after {
+  content: "📊";
+  position: absolute;
+  font-size: 90px;
+  opacity: 0.12;
+  bottom: 15%;
+  left: 10%;
+  animation: pulse 3.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 0.1; }
+  50% { transform: scale(1.05); opacity: 0.15; }
+}
+
+.onboarding.question-2 {
+  background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%);
+}
+
+.onboarding.question-2::before {
+  content: "🎂";
+  position: absolute;
+  font-size: 110px;
+  opacity: 0.1;
+  top: 18%;
+  right: 10%;
+  animation: bounce 2s ease-in-out infinite;
+}
+
+.onboarding.question-2::after {
+  content: "🎉";
+  position: absolute;
+  font-size: 85px;
+  opacity: 0.12;
+  bottom: 22%;
+  left: 12%;
+  animation: bounce 2.5s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+
+.onboarding.question-3 {
+  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+}
+
+.onboarding.question-3::before {
+  content: "💰";
+  position: absolute;
+  font-size: 110px;
+  opacity: 0.12;
+  top: 18%;
+  right: 10%;
+  animation: float 4s ease-in-out infinite;
+}
+
+.onboarding.question-3::after {
+  content: "💵";
+  position: absolute;
+  font-size: 90px;
+  opacity: 0.1;
+  bottom: 18%;
+  left: 8%;
+  animation: float 3.5s ease-in-out infinite 1s;
+}
+
+.onboarding.question-4 {
+  background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+}
+
+.onboarding.question-4::before {
+  content: "📍";
+  position: absolute;
+  font-size: 120px;
+  opacity: 0.1;
+  top: 20%;
+  right: 12%;
+  animation: pinDrop 2s ease-in-out infinite;
+}
+
+.onboarding.question-4::after {
+  content: "🗺️";
+  position: absolute;
+  font-size: 95px;
+  opacity: 0.08;
+  bottom: 20%;
+  left: 10%;
+  animation: pulse 3s ease-in-out infinite;
+}
+
+@keyframes pinDrop {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.onboarding.question-5 {
+  background: linear-gradient(135deg, #fed7aa 0%, #fdba74 100%);
+}
+
+.onboarding.question-5::before {
+  content: "🏦";
+  position: absolute;
+  font-size: 110px;
+  opacity: 0.1;
+  top: 18%;
+  right: 10%;
+  animation: pulse 3s ease-in-out infinite;
+}
+
+.onboarding.question-5::after {
+  content: "🔒";
+  position: absolute;
+  font-size: 85px;
+  opacity: 0.12;
+  bottom: 20%;
+  left: 12%;
+  animation: lockPulse 2.5s ease-in-out infinite;
+}
+
+@keyframes lockPulse {
+  0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.12; }
+  50% { transform: scale(1.05) rotate(3deg); opacity: 0.18; }
 }
 
 .onboarding-header {
   padding: 20px 24px;
-  background: white;
-  border-bottom: 1px solid #e5e7eb;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(229, 231, 235, 0.5);
   display: flex;
   align-items: center;
   gap: 12px;
+  z-index: 10;
 }
 
 .app-logo {
@@ -227,6 +406,7 @@
   color: white;
   font-weight: 700;
   font-size: 18px;
+  box-shadow: 0 2px 8px rgba(22, 163, 74, 0.2);
 }
 
 .app-title {
@@ -240,6 +420,8 @@
   flex: 1;
   padding: 32px 24px;
   overflow-y: auto;
+  z-index: 5;
+  position: relative;
 }
 
 .question-card {
@@ -317,46 +499,105 @@
   padding: 24px 20px;
   border-radius: 16px;
   border: 2px solid #e5e7eb;
-  background: white;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
   color: #1a1a1a;
   font-size: 18px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
   text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.option-icon {
+  font-size: 32px;
+  flex-shrink: 0;
+}
+
+.option-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.option-content strong {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.option-description {
+  font-size: 14px;
+  color: #6b7280;
+  font-weight: 500;
 }
 
 .option-button.active {
   border-color: #16a34a;
   border-width: 3px;
-  background: #f0fdf4;
+  background: rgba(240, 253, 244, 0.98);
   box-shadow: 0 4px 12px rgba(22, 163, 74, 0.15);
 }
 
 .option-button:hover:not(.active) {
   border-color: #d1d5db;
+  background: rgba(255, 255, 255, 1);
+}
+
+/* Bank Grid Specific Styles */
+.bank-grid {
+  margin-bottom: 24px;
+}
+
+.bank-option {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 20px;
+  min-height: 140px;
+}
+
+.bank-logo {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.bank-name {
+  font-size: 16px;
+  font-weight: 700;
+  text-align: center;
 }
 
 .text-input {
   width: 100%;
   padding: 20px 24px;
   border-radius: 16px;
-  border: 2px solid #e5e7eb;
+  border: 2px solid rgba(229, 231, 235, 0.8);
   font-size: 18px;
   outline: none;
-  transition: border-color 0.2s;
-  background: white;
+  transition: all 0.2s;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
 }
 
 .text-input:focus {
   border-color: #16a34a;
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
 }
 
 .income-display {
   padding: 32px;
-  background: white;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
   border-radius: 16px;
-  border: 2px solid #e5e7eb;
+  border: 2px solid rgba(229, 231, 235, 0.8);
 }
 
 .income-value {
@@ -406,9 +647,10 @@
 .bank-consent {
   margin-top: 24px;
   padding: 16px;
-  background: #f0fdf4;
+  background: rgba(240, 253, 244, 0.95);
+  backdrop-filter: blur(10px);
   border-radius: 12px;
-  border: 1px solid #bbf7d0;
+  border: 1px solid rgba(187, 247, 208, 0.8);
 }
 
 .consent-checkbox {
@@ -489,21 +731,28 @@
   width: 100%;
   padding: 14px 18px;
   border-radius: 12px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid rgba(229, 231, 235, 0.8);
   font-size: 15px;
   outline: none;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  transition: all 0.2s;
 }
 
 .text-input-small:focus {
   border-color: #16a34a;
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
 }
 
 .onboarding-nav {
   padding: 20px 24px 32px;
-  background: white;
-  border-top: 1px solid #e5e7eb;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(229, 231, 235, 0.5);
   display: flex;
   gap: 12px;
+  z-index: 10;
 }
 
 .nav-button {
@@ -571,6 +820,11 @@
   .money-note {
     font-size: 36px;
   }
+  
+  .onboarding::before,
+  .onboarding::after {
+    font-size: 80px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -584,5 +838,18 @@
 
   .feature-text {
     font-size: 13px;
+  }
+  
+  .options-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .bank-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  
+  .onboarding::before,
+  .onboarding::after {
+    font-size: 60px;
   }
 }
