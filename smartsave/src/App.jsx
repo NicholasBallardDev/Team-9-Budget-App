@@ -127,7 +127,11 @@ function App() {
 
       if (response.ok) {
         const responseData = await response.json()
-        setInsights(responseData)
+        // Add user's name to insights
+        setInsights({
+          ...responseData,
+          name: data.name
+        })
 
         if (responseData.initialInsight) {
           setInitialInsight(responseData.initialInsight)
@@ -182,6 +186,7 @@ function App() {
 
       // Mock insights for demo
       setInsights({
+        name: data.name,
         initialInsight:
           "Your grocery spending is $216 this week. Small tweaks here could save $50/month 💡",
         categories: [
