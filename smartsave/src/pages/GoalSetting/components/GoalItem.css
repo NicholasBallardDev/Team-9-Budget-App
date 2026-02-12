@@ -1,39 +1,243 @@
-.goal-item-mini-insight {
-  cursor: pointer;
-  transition: all 0.2s;
+/* Base Goal Item Styling */
+.goal-item {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border-left: 4px solid transparent;
+  transition: all 0.2s ease-in-out;
 }
 
-.goal-item-mini-insight:hover {
-  background: linear-gradient(135deg, #fde68a 0%, #fcd34d 100%);
-  transform: translateY(-1px);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.goal-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.insight-header {
+.goal-item-header {
+  margin-bottom: 16px;
+}
+
+.goal-item-title-row {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
+  align-items: flex-start;
+  margin-bottom: 8px;
 }
 
-.insight-title {
+.goal-item-title {
+  font-size: 18px;
   font-weight: 600;
-  color: #374151;
-  font-size: 15px;
+  color: #1a1a1a;
+  margin: 0;
 }
 
-.insight-close {
-  background: none;
-  border: none;
-  font-size: 20px;
-  color: #9ca3af;
+.goal-item-savings {
+  font-size: 18px;
+  font-weight: 600;
+  color: #4caf50;
+  white-space: nowrap;
+  margin-left: 16px;
+}
+
+.goal-item-description-preview {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0 0 8px 0;
+  color: #6c757d;
+  font-size: 14px;
+}
+
+.goal-item-date-row {
+  font-size: 13px;
+  color: #666;
+}
+
+.goal-item-date .date-icon {
+  margin-right: 4px;
+}
+
+.goal-item-date.approaching {
+  color: #f59e0b;
+  font-weight: 500;
+}
+
+.goal-item-date.overdue {
+  color: #ef4444;
+  font-weight: 500;
+}
+
+/* Controls */
+.goal-item-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-top: 16px;
+  border-top: 1px solid #f0f0f0;
+  margin-top: 16px;
+}
+
+.goal-item-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  color: #374151;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
   cursor: pointer;
-  padding: 4px 8px;
-  border-radius: 4px;
   transition: all 0.2s;
 }
 
-.insight-close:hover {
-  background: #f3f4f6;
+.goal-item-btn:hover {
+  background: #e5e7eb;
+  border-color: #d1d5db;
+}
+
+.goal-item-btn-complete {
+  background-color: #e8f5e9;
+  border-color: #a5d6a7;
+  color: #2e7d32;
+}
+.goal-item-btn-complete:hover {
+  background-color: #c8e6c9;
+}
+
+.goal-item-btn-insight {
+  background-color: #eef2ff;
+  border-color: #c7d2fe;
+  color: #4338ca;
+}
+.goal-item-btn-insight:hover {
+  background-color: #e0e7ff;
+}
+
+.goal-item-btn-delete {
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: #9ca3af;
+  margin-left: auto;
+}
+.goal-item-btn-delete:hover {
+  color: #ef4444;
+}
+
+/* AI Insight Panel */
+.goal-item-insight-panel {
+  margin-top: 16px;
+  padding: 16px;
+  background-color: #f9fafb;
+  border-radius: 8px;
+  border: 1px solid #f3f4f6;
+}
+
+.insight-loading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #6b7280;
+}
+
+.loading-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #e5e7eb;
+  border-top-color: #4338ca;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.insight-content p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
   color: #374151;
+}
+
+.insight-error p {
+  margin: 0;
+  font-size: 14px;
+  color: #b91c1c;
+}
+
+/* Editing View */
+.goal-item-editing {
+  border-left-color: #3b82f6;
+}
+
+.goal-item-edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.edit-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 6px;
+}
+
+.goal-item-textarea,
+.goal-item-input {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  box-sizing: border-box;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+
+.goal-item-textarea:focus,
+.goal-item-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+.edit-form-row {
+  display: flex;
+  gap: 16px;
+}
+
+.edit-form-field {
+  flex: 1;
+}
+
+.goal-item-edit-controls {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.goal-item-btn-save {
+  background-color: #2563eb;
+  border-color: #2563eb;
+  color: white;
+}
+.goal-item-btn-save:hover {
+  background-color: #1d4ed8;
+}
+
+.goal-item-btn-cancel {
+  background-color: transparent;
+  border-color: #d1d5db;
+  color: #374151;
+}
+.goal-item-btn-cancel:hover {
+  background-color: #f3f4f6;
 }

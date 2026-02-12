@@ -1,10 +1,10 @@
-import { useState } from "react";
-import "./GoalSetting.css";
-import GoalItem from "./components/GoalItem";
-import SavingsSummary from "./components/SavingsSummary";
-import AIGoalSummary from "./components/AIGoalSummary";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { useState } from "react"
+import "./GoalSetting.css"
+import GoalItem from "./components/GoalItem"
+import SavingsSummary from "./components/SavingsSummary"
+import "react-toastify/dist/ReactToastify.css"
+import { ToastContainer } from "react-toastify"
+import AIGoalSummary from "./components/AIGoalSummary"
 
 /**
  * Goal object structure:
@@ -12,6 +12,7 @@ import "react-toastify/dist/ReactToastify.css";
  *   id: string,
  *   title: string,
  *   description: string,
+ *   currentSavings: number,
  *   expectedSavings: number | null,
  *   targetDate: string | null,
  *   completed: boolean,
@@ -26,29 +27,89 @@ function GoalSetting({ formData, insights }) {
   // STATE
   // =============================
 
-  const [goals, setGoals] = useState([]);
-  const [completedGoals, setCompletedGoals] = useState([]);
-  const [weeklySavings, setWeeklySavings] = useState(0);
+  const [goals, setGoals] = useState([
+    {
+      id: "1",
+      title: "Save for vacation to Japan",
+      description:
+        "Planning a 2-week trip to Tokyo and Kyoto. Need to cover flights, accommodation, and daily expenses.",
+      expectedSavings: 5000,
+      targetDate: "2026-06-15",
+      completed: false,
+      completedAt: null,
+      insight:
+        "Based on your current spending patterns, you can reach this goal by saving $500 per month. Consider reducing dining out expenses by 20% to accelerate your savings.",
+      createdAt: Date.now() - 86400000 * 30,
+    },
+    {
+      id: "2",
+      title: "Emergency fund",
+      description: "Build 6 months of living expenses as a safety net.",
+      expectedSavings: 15000,
+      targetDate: "2026-12-31",
+      completed: false,
+      completedAt: null,
+      insight: null,
+      createdAt: Date.now() - 86400000 * 20,
+    },
+    {
+      id: "3",
+      title: "New laptop for work",
+      description: "",
+      expectedSavings: 2000,
+      targetDate: "2026-02-20",
+      completed: false,
+      completedAt: null,
+      insight: null,
+      createdAt: Date.now() - 86400000 * 10,
+    },
+    {
+      id: "4",
+      title: "Pay off credit card debt",
+      description:
+        "Clear remaining balance on credit card to improve credit score.",
+      expectedSavings: 3500,
+      targetDate: "2026-02-10",
+      completed: false,
+      completedAt: null,
+      insight:
+        "You're making great progress! Focus on paying more than the minimum to reduce interest charges.",
+      createdAt: Date.now() - 86400000 * 5,
+    },
+    {
+      id: "5",
+      title: "Start investing",
+      description: "",
+      expectedSavings: null,
+      targetDate: null,
+      completed: false,
+      completedAt: null,
+      insight: null,
+      createdAt: Date.now() - 86400000 * 2,
+    },
+  ])
+  const [completedGoals, setCompletedGoals] = useState([])
+  const [weeklySavings, setWeeklySavings] = useState(0)
 
-  const [showCompleted, setShowCompleted] = useState(false);
-  const [editingGoalId, setEditingGoalId] = useState(null);
-  const [expandedGoalId, setExpandedGoalId] = useState(null);
-  const [loadingInsightId, setLoadingInsightId] = useState(null);
+  const [showCompleted, setShowCompleted] = useState(false)
+  const [editingGoalId, setEditingGoalId] = useState(null)
+  const [expandedGoalId, setExpandedGoalId] = useState(null)
+  const [loadingInsightId, setLoadingInsightId] = useState(null)
 
-  const [newGoalTitle, setNewGoalTitle] = useState("");
-  const [newGoalSavings, setNewGoalSavings] = useState("");
-  const [newGoalTargetDate, setNewGoalTargetDate] = useState("");
+  const [newGoalTitle, setNewGoalTitle] = useState("")
+  const [newGoalSavings, setNewGoalSavings] = useState("")
+  const [newGoalTargetDate, setNewGoalTargetDate] = useState("")
 
   // =============================
   // AI INSIGHT FETCH (n8n)
   // =============================
 
   const fetchInsightForGoal = async (goalId, goal) => {
-    setLoadingInsightId(goalId);
+    setLoadingInsightId(goalId)
 
     try {
-      const income = formData?.income || 60000;
-      const monthlyExpenses = 3000;
+      const income = formData?.income || 60000
+      const monthlyExpenses = 3000
 
       const response = await fetch("/api/n8n/webhook/goals", {
         method: "POST",
@@ -64,21 +125,21 @@ function GoalSetting({ formData, insights }) {
             monthlyExpenses,
           },
         }),
-      });
+      })
 
       if (!response.ok) {
-        throw new Error(`API error: ${response.status}`);
+        throw new Error(`API error: ${response.status}`)
       }
 
-      const data = await response.json();
+      const data = await response.json()
 
       setGoals((prev) =>
         prev.map((g) =>
-          g.id === goalId ? { ...g, insight: data.insight } : g
-        )
-      );
+          g.id === goalId ? { ...g, insight: data.insight } : g,
+        ),
+      )
     } catch (error) {
-      console.error("Insight error:", error);
+      console.error("Insight error:", error)
 
       setGoals((prev) =>
         prev.map((g) =>
@@ -88,46 +149,44 @@ function GoalSetting({ formData, insights }) {
                 insight:
                   "Unable to generate insight at this time. Click again to retry.",
               }
-            : g
-        )
-      );
+            : g,
+        ),
+      )
     } finally {
-      setLoadingInsightId(null);
+      setLoadingInsightId(null)
     }
-  };
+  }
 
   // =============================
   // CREATE GOAL (Manual)
   // =============================
 
   const handleCreateGoal = async () => {
-    const trimmedTitle = newGoalTitle.trim();
-    if (!trimmedTitle) return;
+    const trimmedTitle = newGoalTitle.trim()
+    if (!trimmedTitle) return
 
     const newGoal = {
       id: Date.now().toString(),
       title: trimmedTitle,
       description: "",
-      expectedSavings: newGoalSavings
-        ? parseFloat(newGoalSavings)
-        : null,
+      expectedSavings: newGoalSavings ? parseFloat(newGoalSavings) : null,
       targetDate: newGoalTargetDate || null,
       completed: false,
       completedAt: null,
       insight: null,
       createdAt: Date.now(),
-    };
+    }
 
-    setGoals((prev) => [...prev, newGoal]);
+    setGoals([...goals, newGoal])
 
-    setNewGoalTitle("");
-    setNewGoalSavings("");
-    setNewGoalTargetDate("");
+    setNewGoalTitle("")
+    setNewGoalSavings("")
+    setNewGoalTargetDate("")
 
     if (newGoal.expectedSavings && newGoal.targetDate) {
-      await fetchInsightForGoal(newGoal.id, newGoal);
+      await fetchInsightForGoal(newGoal.id, newGoal)
     }
-  };
+  }
 
   // =============================
   // AI QUICK GOALS
@@ -144,68 +203,65 @@ function GoalSetting({ formData, insights }) {
       completedAt: null,
       insight: null,
       createdAt: Date.now(),
-    };
+    }
 
-    setGoals((prev) => [...prev, newGoal]);
-  };
+    setGoals([...goals, newGoal])
+  }
 
   // =============================
   // GOAL ACTIONS
   // =============================
 
   const handleEdit = (id) => {
-    setEditingGoalId(id);
-  };
+    setEditingGoalId(id)
+  }
 
   const handleUpdateGoal = (id, updates) => {
-    setGoals((prev) =>
-      prev.map((goal) =>
-        goal.id === id ? { ...goal, ...updates } : goal
-      )
-    );
-    setEditingGoalId(null);
-  };
+    setGoals(
+      goals.map((goal) => (goal.id === id ? { ...goal, ...updates } : goal)),
+    )
+    setEditingGoalId(null)
+  }
+  const handleCancel = () => {
+    setEditingGoalId(null)
+  }
 
   const handleDelete = (id) => {
-    setGoals((prev) => prev.filter((goal) => goal.id !== id));
-    setCompletedGoals((prev) =>
-      prev.filter((goal) => goal.id !== id)
-    );
-  };
+    setGoals((prev) => prev.filter((goal) => goal.id !== id))
+    setCompletedGoals((prev) => prev.filter((goal) => goal.id !== id))
+  }
 
   const handleComplete = (id) => {
-    const goalToComplete = goals.find((goal) => goal.id === id);
-    if (!goalToComplete) return;
+    const goalToComplete = goals.find((goal) => goal.id === id)
+    if (!goalToComplete) return
 
     const completedGoal = {
       ...goalToComplete,
       completed: true,
       completedAt: Date.now(),
-    };
-
-    if (goalToComplete.expectedSavings) {
-      setWeeklySavings(
-        (prev) => prev + goalToComplete.expectedSavings
-      );
     }
 
-    setCompletedGoals((prev) => [...prev, completedGoal]);
-    setGoals((prev) => prev.filter((goal) => goal.id !== id));
-  };
+    if (goalToComplete.expectedSavings) {
+      setWeeklySavings(weeklySavings + goalToComplete.expectedSavings)
+    }
+
+    setCompletedGoals([...completedGoals, completedGoal])
+    setGoals((prev) => prev.filter((goal) => goal.id !== id))
+  }
 
   const handleToggleInsight = async (id) => {
     if (expandedGoalId === id) {
-      setExpandedGoalId(null);
-      return;
+      setExpandedGoalId(null)
+      return
     }
 
-    setExpandedGoalId(id);
+    setExpandedGoalId(id)
 
-    const goal = goals.find((g) => g.id === id);
+    const goal = goals.find((g) => g.id === id)
     if (goal && !goal.insight) {
-      await fetchInsightForGoal(id, goal);
+      await fetchInsightForGoal(id, goal)
     }
-  };
+  }
 
   // =============================
   // UI
@@ -215,48 +271,62 @@ function GoalSetting({ formData, insights }) {
     <div className="goal-setting">
       <div className="goal-header">
         <h1 className="goal-title">My Goals</h1>
-        <p className="goal-subtitle">
-          Track and achieve your financial goals
-        </p>
+        <p className="goal-subtitle">Track your financial goals</p>
       </div>
 
+      {/* Savings Summary */}
       <SavingsSummary weeklySavings={weeklySavings} />
-      <ToastContainer position="top-right" autoClose={3000} />
 
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
+
+      {/* AI Goal Summary */}
       <AIGoalSummary
         onAddGoal={handleAddQuickGoal}
         categories={insights?.categories}
       />
 
-      {/* Create Goal */}
+      {/* Goal Creation Form */}
       <div className="goal-form">
         <input
           type="text"
+          className="goal-input"
           placeholder="Enter your goal title"
           value={newGoalTitle}
           onChange={(e) => setNewGoalTitle(e.target.value)}
         />
 
-        <input
-          type="number"
-          placeholder="Expected savings ($)"
-          value={newGoalSavings}
-          onChange={(e) => setNewGoalSavings(e.target.value)}
-        />
+        <div className="goal-form-optional">
+          <input
+            type="number"
+            className="goal-input-savings"
+            placeholder="Expected savings ($)"
+            value={newGoalSavings}
+            onChange={(e) => setNewGoalSavings(e.target.value)}
+            min="0"
+            step="0.01"
+          />
 
-        <input
-          type="date"
-          value={newGoalTargetDate}
-          onChange={(e) => setNewGoalTargetDate(e.target.value)}
-        />
+          <input
+            type="date"
+            className="goal-input-date"
+            placeholder="Target date"
+            value={newGoalTargetDate}
+            onChange={(e) => setNewGoalTargetDate(e.target.value)}
+          />
+        </div>
 
-        <button onClick={handleCreateGoal}>
+        <button className="goal-submit-btn" onClick={handleCreateGoal}>
           Add Goal
         </button>
       </div>
 
-      {/* Active Goals */}
+      {/* Goal List */}
       <div className="goal-list">
+        {goals.length === 0 && (
+          <p className="no-goals-message">
+            No goals yet. Create your first goal above!
+          </p>
+        )}
         {goals.map((goal) => (
           <GoalItem
             key={goal.id}
@@ -266,6 +336,7 @@ function GoalSetting({ formData, insights }) {
             isLoadingInsight={loadingInsightId === goal.id}
             onEdit={handleEdit}
             onSave={handleUpdateGoal}
+            onCancel={handleCancel}
             onDelete={handleDelete}
             onComplete={handleComplete}
             onToggleInsight={handleToggleInsight}
@@ -273,32 +344,36 @@ function GoalSetting({ formData, insights }) {
         ))}
       </div>
 
-      {/* Completed Goals */}
+      {/* Completed Goals Section */}
       {completedGoals.length > 0 && (
-        <div className="completed-section">
+        <div className="completed-goals-section">
           <button
-            onClick={() =>
-              setShowCompleted(!showCompleted)
-            }
+            className="toggle-completed-btn"
+            onClick={() => setShowCompleted(!showCompleted)}
           >
-            {showCompleted ? "Hide" : "Show"} Completed (
-            {completedGoals.length})
+            {showCompleted ? "Hide" : "Show"} Completed ({completedGoals.length}
+            )
           </button>
-
-          {showCompleted &&
-            completedGoals.map((goal) => (
-              <GoalItem
-                key={goal.id}
-                goal={goal}
-                isExpanded={expandedGoalId === goal.id}
-                onDelete={handleDelete}
-                onToggleInsight={handleToggleInsight}
-              />
-            ))}
+          {showCompleted && (
+            <div className="goal-list">
+              {completedGoals
+                .sort((a, b) => b.completedAt - a.completedAt)
+                .map((goal) => (
+                  <GoalItem
+                    key={goal.id}
+                    goal={goal}
+                    isEditing={false} // Completed goals are not editable
+                    isExpanded={expandedGoalId === goal.id}
+                    onDelete={handleDelete}
+                    onToggleInsight={handleToggleInsight}
+                  />
+                ))}
+            </div>
+          )}
         </div>
       )}
     </div>
-  );
+  )
 }
 
-export default GoalSetting;
+export default GoalSetting
