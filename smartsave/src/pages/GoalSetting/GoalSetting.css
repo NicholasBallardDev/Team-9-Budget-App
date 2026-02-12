@@ -1,7 +1,7 @@
 .goal-setting {
   padding: 20px;
   padding-bottom: 80px;
-  max-width: 800px;
+  max-width: 100%;
   margin: 0 auto;
   min-height: 100vh;
   background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%);
@@ -331,4 +331,22 @@
   .goal-setting::after {
     font-size: 90px;
   }
+}
+
+.toggle-completed-btn {
+  margin: 10px 0px;
+  background-color: white; /* A neutral color */
+  border: none;
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.toggle-completed-btn:hover {
+  background-color: #E8E8E8; /* Darker shade on hover */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
