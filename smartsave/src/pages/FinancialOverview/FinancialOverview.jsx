@@ -1,4 +1,3 @@
-import { getCategoryTotals } from '../../utils/mockData';
 import './FinancialOverview.css';
 
 function FinancialOverview({ insights, onNavigate }) {

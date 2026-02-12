@@ -1,4 +1,3 @@
-import { getBrandColor } from '../../utils/mockData';
 // import './BrandBadge.css';
 
 function BrandBadge({ brand }) {
