@@ -10,12 +10,64 @@ const FUEL_TYPES = [
   { id: "Diesel", short: "DSL", name: "Diesel" }
 ];
 
+// Mock data fallback
+const MOCK_FUEL_DATA = {
+  fuelType: "U91",
+  locationName: "Sydney CBD",
+  cheapestPrice: 1.619,
+  weeklySavings: 12.5,
+  insight: "Fuel prices are 8¢ lower than last week! Great time to fill up.",
+  stations: [
+    {
+      id: 1,
+      name: "Metro Petroleum St Leonards",
+      address: "34 Pacific Hwy, St Leonards NSW 2065",
+      brand: "Metro",
+      selectedPrice: 1.619
+    },
+    {
+      id: 2,
+      name: "7-Eleven Crows Nest",
+      address: "12 Falcon St, Crows Nest NSW 2065",
+      brand: "7-Eleven",
+      selectedPrice: 1.659
+    },
+    {
+      id: 3,
+      name: "BP Mosman",
+      address: "456 Military Rd, Mosman NSW 2088",
+      brand: "BP",
+      selectedPrice: 1.649
+    },
+    {
+      id: 4,
+      name: "Shell Neutral Bay",
+      address: "789 Military Rd, Neutral Bay NSW 2089",
+      brand: "Shell",
+      selectedPrice: 1.679
+    },
+    {
+      id: 5,
+      name: "Coles Express Chatswood",
+      address: "445 Victoria Ave, Chatswood NSW 2067",
+      brand: "Coles",
+      selectedPrice: 1.679
+    }
+  ],
+  mostVisitedStation: {
+    brand: "7-Eleven",
+    visits: 8
+  }
+};
+
 function FuelPrices({ onNavigate, userPostcode }) {
   const [selectedFuel, setSelectedFuel] = useState("U91");
   const [fuelData, setFuelData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const hasFetchedRef = useRef(false); // Add this line
+  const [usingMockData, setUsingMockData] = useState(false);
+  const hasFetchedRef = useRef(false);
+  const timeoutRef = useRef(null);
 
   // Get postcode from props or localStorage
   const postcode = userPostcode || localStorage.getItem('userPostcode') || '2000';
@@ -23,9 +75,15 @@ function FuelPrices({ onNavigate, userPostcode }) {
   useEffect(() => {
     // Reset the ref when fuel type changes
     hasFetchedRef.current = false;
+    setUsingMockData(false);
+
+    // Clear any existing timeout
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
 
     // If we have cached data for this fuel type, use it
-    if (fuelData && fuelData.fuelType === selectedFuel) {
+    if (fuelData && fuelData.fuelType === selectedFuel && !usingMockData) {
       console.log('✅ Using cached fuel data');
       return;
     }
@@ -38,11 +96,29 @@ function FuelPrices({ onNavigate, userPostcode }) {
 
     hasFetchedRef.current = true;
     fetchFuelPrices();
+
+    // Cleanup timeout on unmount
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
   }, [selectedFuel]);
 
   const fetchFuelPrices = async () => {
     setLoading(true);
     setError(null);
+
+    // Set a 2-second timeout to fallback to mock data
+    timeoutRef.current = setTimeout(() => {
+      console.warn('⚠️ API taking too long, using mock data');
+      setUsingMockData(true);
+      setFuelData({
+        ...MOCK_FUEL_DATA,
+        fuelType: selectedFuel
+      });
+      setLoading(false);
+    }, 2000);
 
     try {
       const response = await fetch('/api/n8n/webhook/fuel-check', {
@@ -55,16 +131,37 @@ function FuelPrices({ onNavigate, userPostcode }) {
         })
       });
 
+      // Clear timeout if request completes in time
+      clearTimeout(timeoutRef.current);
+
       if (!response.ok) {
         throw new Error(`Server error: ${response.status}`);
       }
 
       const data = await response.json();
-      console.log('Fuel data received:', data);
-      setFuelData(data);
+      console.log('✅ Fuel data received from API:', data);
+      
+      // Only update if we haven't already shown mock data
+      if (!usingMockData) {
+        setFuelData(data);
+      }
 
     } catch (error) {
-      console.error('Error fetching fuel prices:', error);
+      console.error('❌ Error fetching fuel prices:', error);
+      
+      // Clear timeout
+      clearTimeout(timeoutRef.current);
+      
+      // If we haven't shown mock data yet, show it now
+      if (!usingMockData) {
+        console.log('🔄 Falling back to mock data due to error');
+        setUsingMockData(true);
+        setFuelData({
+          ...MOCK_FUEL_DATA,
+          fuelType: selectedFuel
+        });
+      }
+      
       setError(error.message);
     } finally {
       setLoading(false);
@@ -85,20 +182,6 @@ function FuelPrices({ onNavigate, userPostcode }) {
         <div className="loading-container">
           <div className="spinner">⛽</div>
           <p>Finding the cheapest fuel near you...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="fuel-prices">
-        <div className="fuel-header">
-          <button className="back-button" onClick={() => onNavigate("overview")}>←</button>
-          <h2>⛽ Fuel prices around your suburb</h2>
-        </div>
-        <div style={{ padding: '20px', textAlign: 'center', color: 'red' }}>
-          Error: {error}
         </div>
       </div>
     );
@@ -127,6 +210,13 @@ function FuelPrices({ onNavigate, userPostcode }) {
           </button>
           <h2 className="fuel-title">⛽ Fuel prices around your suburb</h2>
         </div>
+
+        {/* Mock data indicator */}
+        {usingMockData && (
+          <div className="mock-data-banner">
+            ℹ️ Showing sample data (API unavailable)
+          </div>
+        )}
 
         {/* Location indicator */}
         <div className="fuel-location">
