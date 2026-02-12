@@ -3,32 +3,47 @@ import ProgressBar from '../../components/ProgressBar/ProgressBar';
 import './Onboarding.css';
 
 function Onboarding({ onComplete, isLoading }) {
+  const [showLanding, setShowLanding] = useState(true);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [formData, setFormData] = useState({
+    name: "",
     financialGoal: "",
     age: "",
     income: 50000,
     postcode: "",
     bank: "",
+    bankConsent: false,
     goal: ""
   });
-  const totalQuestions = 5;
+  const totalQuestions = 6;
+
+  const handleStartOnboarding = () => {
+    setShowLanding(false);
+  };
 
   const nextQuestion = () => {
-    if (currentQuestion === 0 && !formData.financialGoal) {
+    if (currentQuestion === 0 && !formData.name.trim()) {
+      alert("Please enter your name");
+      return;
+    }
+    if (currentQuestion === 1 && !formData.financialGoal) {
       alert("Please select your primary goal");
       return;
     }
-    if (currentQuestion === 1 && !formData.age) {
+    if (currentQuestion === 2 && !formData.age) {
       alert("Please enter your age");
       return;
     }
-    if (currentQuestion === 3 && !formData.postcode) {
+    if (currentQuestion === 4 && !formData.postcode) {
       alert("Please enter your postcode");
       return;
     }
-    if (currentQuestion === 4 && !formData.bank) {
+    if (currentQuestion === 5 && !formData.bank) {
       alert("Please select your bank");
+      return;
+    }
+    if (currentQuestion === 5 && !formData.bankConsent) {
+      alert("Please consent to linking your bank account");
       return;
     }
     
@@ -45,6 +60,69 @@ function Onboarding({ onComplete, isLoading }) {
     }
   };
 
+  // Landing Page View
+  if (showLanding) {
+    return (
+      <div className="landing-page">
+        <div className="landing-overlay">
+          {/* Header */}
+          <div className="landing-header">
+            <div className="app-logo">SS</div>
+            <h1 className="app-title">SmartSave</h1>
+          </div>
+
+          {/* Hero Content */}
+          <div className="landing-content">
+            <div className="hero-section">
+              <h1 className="hero-title">Take Control of Your Money</h1>
+              <p className="hero-subtitle">
+                Smart budgeting and savings made simple. Track your spending, find better deals, and reach your financial goals faster.
+              </p>
+
+              <div className="feature-list">
+                <div className="feature-item">
+                  <span className="feature-icon">💰</span>
+                  <span className="feature-text">Track spending effortlessly</span>
+                </div>
+                <div className="feature-item">
+                  <span className="feature-icon">🎯</span>
+                  <span className="feature-text">Set and achieve savings goals</span>
+                </div>
+                <div className="feature-item">
+                  <span className="feature-icon">📊</span>
+                  <span className="feature-text">Get personalized insights</span>
+                </div>
+                <div className="feature-item">
+                  <span className="feature-icon">🔍</span>
+                  <span className="feature-text">Find the best local deals</span>
+                </div>
+              </div>
+
+              <button className="cta-button" onClick={handleStartOnboarding}>
+                Get Started - It's Free
+              </button>
+
+              <p className="trust-badge">
+                🔒 Bank-level security • Your data stays private
+              </p>
+            </div>
+          </div>
+
+          {/* Decorative elements */}
+          <div className="piggy-bank piggy-1">🐷</div>
+          <div className="piggy-bank piggy-2">🐷</div>
+          <div className="piggy-bank piggy-3">🐷</div>
+          <div className="money-note note-1">💵</div>
+          <div className="money-note note-2">💵</div>
+          <div className="money-note note-3">💵</div>
+          <div className="money-note note-4">💶</div>
+          <div className="money-note note-5">💷</div>
+        </div>
+      </div>
+    );
+  }
+
+  // Onboarding Questions View
   return (
     <div className="onboarding">
       {/* Header */}
@@ -58,8 +136,24 @@ function Onboarding({ onComplete, isLoading }) {
 
       {/* Question Content */}
       <div className="question-content">
-        {/* Question 0: Financial Goal */}
+        {/* Question 0: Name */}
         {currentQuestion === 0 && (
+          <div className="question-card">
+            <h2 className="question-title">What's your name?</h2>
+            <p className="question-subtitle">Let's personalize your experience</p>
+
+            <input
+              type="text"
+              className="text-input"
+              value={formData.name}
+              onChange={e => setFormData({ ...formData, name: e.target.value })}
+              placeholder="e.g. Sarah"
+            />
+          </div>
+        )}
+
+        {/* Question 1: Financial Goal */}
+        {currentQuestion === 1 && (
           <div className="question-card">
             <h2 className="question-title">What's your primary goal?</h2>
             <p className="question-subtitle">Choose what matters most to you right now</p>
@@ -81,8 +175,8 @@ function Onboarding({ onComplete, isLoading }) {
           </div>
         )}
 
-        {/* Question 1: Age */}
-        {currentQuestion === 1 && (
+        {/* Question 2: Age */}
+        {currentQuestion === 2 && (
           <div className="question-card">
             <h2 className="question-title">How old are you?</h2>
             <p className="question-subtitle">This helps us personalize your savings recommendations</p>
@@ -97,8 +191,8 @@ function Onboarding({ onComplete, isLoading }) {
           </div>
         )}
 
-        {/* Question 2: Income Slider */}
-        {currentQuestion === 2 && (
+        {/* Question 3: Income Slider */}
+        {currentQuestion === 3 && (
           <div className="question-card">
             <h2 className="question-title">What's your annual income?</h2>
             <p className="question-subtitle">Slide to your approximate income range</p>
@@ -125,8 +219,8 @@ function Onboarding({ onComplete, isLoading }) {
           </div>
         )}
 
-        {/* Question 3: Postcode */}
-        {currentQuestion === 3 && (
+        {/* Question 4: Postcode */}
+        {currentQuestion === 4 && (
           <div className="question-card">
             <h2 className="question-title">What's your postcode?</h2>
             <p className="question-subtitle">We'll use this to find the best deals near you</p>
@@ -141,8 +235,8 @@ function Onboarding({ onComplete, isLoading }) {
           </div>
         )}
 
-        {/* Question 4: Bank Selection */}
-        {currentQuestion === 4 && (
+        {/* Question 5: Bank Selection */}
+        {currentQuestion === 5 && (
           <div className="question-card">
             <h2 className="question-title">Connect your bank</h2>
             <p className="question-subtitle">Select your bank to analyze your spending (using demo data)</p>
@@ -157,6 +251,20 @@ function Onboarding({ onComplete, isLoading }) {
                   {bank}
                 </button>
               ))}
+            </div>
+
+            <div className="bank-consent">
+              <label className="consent-checkbox">
+                <input
+                  type="checkbox"
+                  checked={formData.bankConsent}
+                  onChange={e => setFormData({ ...formData, bankConsent: e.target.checked })}
+                />
+                <div className="checkbox-custom"></div>
+                <span className="consent-text">
+                  I consent to linking my bank account to SmartSave for analyzing my spending patterns. My data will be kept secure and private.
+                </span>
+              </label>
             </div>
 
             <div className="goal-input">
@@ -185,7 +293,16 @@ function Onboarding({ onComplete, isLoading }) {
           onClick={nextQuestion}
           disabled={isLoading}
         >
-          {isLoading ? "Analyzing..." : currentQuestion === totalQuestions - 1 ? "Get My Insights →" : "Continue →"}
+          {isLoading ? (
+            <>
+              Analyzing
+              <span className="loading-dots">
+                <span>.</span>
+                <span>.</span>
+                <span>.</span>
+              </span>
+            </>
+          ) : currentQuestion === totalQuestions - 1 ? "Get My Insights →" : "Continue →"}
         </button>
       </div>
     </div>
