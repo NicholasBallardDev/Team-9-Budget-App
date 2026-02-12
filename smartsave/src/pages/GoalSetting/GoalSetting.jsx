@@ -17,7 +17,7 @@ import GoalItem from './components/GoalItem';
  * }
  */
 
-function GoalSetting() {
+function GoalSetting({ formData }) {
   // Core data state
   const [goals, setGoals] = useState([
     {
@@ -90,19 +90,68 @@ function GoalSetting() {
   const [newGoalTargetDate, setNewGoalTargetDate] = useState('');
 
   /**
-   * Creates a new goal with validation
-   * Requirements: 1.1, 1.2, 1.3
+   * Fetches AI insight for a specific goal
    */
-  const handleCreateGoal = () => {
-    // Validate title is non-empty and not whitespace-only
+  const fetchInsightForGoal = async (goalId, goal) => {
+    setLoadingInsightId(goalId);
+    
+    try {
+      const income = formData?.income || 60000;
+      const monthlyExpenses = 3000;
+      
+      const response = await fetch('/api/n8n/webhook-test/goals', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          goalId: goal.id,
+          title: goal.title,
+          description: goal.description || '',
+          expectedSavings: goal.expectedSavings,
+          targetDate: goal.targetDate,
+          userProfile: {
+            income: income,
+            monthlyExpenses: monthlyExpenses
+          }
+        })
+      });
+      
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      console.log('✅ Insight received for goal:', goalId, data);
+      
+      setGoals(prevGoals => prevGoals.map(g => 
+        g.id === goalId ? { ...g, insight: data.insight } : g
+      ));
+      
+    } catch (error) {
+      console.error('❌ Error fetching insight for goal:', goalId, error);
+      
+      setGoals(prevGoals => prevGoals.map(g => 
+        g.id === goalId ? { 
+          ...g, 
+          insight: 'Unable to generate insight at this time. Click "Get Insight" to try again.' 
+        } : g
+      ));
+    } finally {
+      setLoadingInsightId(null);
+    }
+  };
+
+  /**
+   * Creates a new goal with validation and fetches AI insight
+   */
+  const handleCreateGoal = async () => {
     const trimmedTitle = newGoalTitle.trim();
     if (!trimmedTitle) {
-      return; // Prevent creation of invalid goals
+      return;
     }
 
-    // Generate unique ID
+    const newGoalId = Date.now().toString();
     const newGoal = {
-      id: Date.now().toString(),
+      id: newGoalId,
       title: trimmedTitle,
       description: '',
       expectedSavings: newGoalSavings ? parseFloat(newGoalSavings) : null,
@@ -113,13 +162,17 @@ function GoalSetting() {
       createdAt: Date.now()
     };
 
-    // Add to goals array
     setGoals([...goals, newGoal]);
 
-    // Clear input fields after creation
     setNewGoalTitle('');
     setNewGoalSavings('');
     setNewGoalTargetDate('');
+
+    const hasEnoughDetails = newGoal.expectedSavings && newGoal.targetDate;
+    
+    if (hasEnoughDetails) {
+      await fetchInsightForGoal(newGoalId, newGoal);
+    }
   };
 
   /**
@@ -157,12 +210,17 @@ function GoalSetting() {
     }
   };
 
-  const handleToggleInsight = (id) => {
+  const handleToggleInsight = async (id) => {
     if (expandedGoalId === id) {
       setExpandedGoalId(null);
     } else {
       setExpandedGoalId(id);
-      // TODO: Fetch AI insight if not cached (Task 11)
+      
+      const goal = goals.find(g => g.id === id);
+      
+      if (!goal.insight) {
+        await fetchInsightForGoal(id, goal);
+      }
     }
   };
 
@@ -181,11 +239,10 @@ function GoalSetting() {
   return (
     <div className="goal-setting">
       <div className="goal-header">
-        <h1 className="goal-title">My john</h1>
+        <h1 className="goal-title">My Goals</h1>
         <p className="goal-subtitle">Track your financial goals</p>
       </div>
       
-
       {/* Goal Creation Form */}
       <div className="goal-form">
         <input
@@ -246,11 +303,8 @@ function GoalSetting() {
             onUpdateTargetDate={handleUpdateTargetDate}
           />
         ))}
-        
       </div>
-
     </div>
-    
   );
 }
 
