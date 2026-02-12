@@ -4,8 +4,8 @@ import FinancialOverview from './pages/FinancialOverview/FinancialOverview';
 import FuelPrices from './pages/FuelPrices/FuelPrices';
 import GroceryComparison from './pages/GroceryComparison/GroceryComparison';
 import InsightPopup from './components/InsightPopup/InsightPopup';
-import ChatWidget from './components/ChatWidget/ChatWidget';
 import BottomNav from './components/BottomNav/BottomNav';
+import AIAnalysis from './pages/AIAnalysis/AIAnalysis';
 import './App.css';
 
 const N8N_FINANCIAL_WEBHOOK = "/api/n8n/webhook/savie-form";
@@ -103,7 +103,7 @@ function App() {
 
     // Pre-load grocery data in background (ADD THIS WHOLE BLOCK)
     //n8n integration
-    fetch('/api/n8n/webhook/grocery-comparison', {
+    fetch(N8N_GROCERY_WEBHOOK, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -187,7 +187,10 @@ function App() {
         <GroceryComparison onNavigate={setCurrentPage} userPostcode={formData?.postcode} initialGroceryData={groceryData} />
       )}
 
-      <ChatWidget />
+      {currentPage === "aianalysis" && (
+        <AIAnalysis onNavigate={setCurrentPage} />
+      )}
+
       <BottomNav currentPage={currentPage} onNavigate={setCurrentPage} />
     </div>
   );

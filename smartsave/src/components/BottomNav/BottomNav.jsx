@@ -26,6 +26,14 @@ function BottomNav({ currentPage, onNavigate }) {
         <div className="bottom-nav-icon">🛒</div>
         <span>Groceries</span>
       </button>
+
+      <button
+        className={`bottom-nav-button ${currentPage === "aianalysis" ? "active" : ""}`}
+        onClick={() => onNavigate("aianalysis")}
+      >
+        <div className="bottom-nav-icon">🤖</div>
+        <span>AI</span>
+      </button>
     </nav>
   );
 }

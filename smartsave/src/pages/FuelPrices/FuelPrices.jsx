@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import BrandBadge from '../../components/BrandBadge/BrandBadge';
 import './FuelPrices.css';
 
@@ -15,11 +15,15 @@ function FuelPrices({ onNavigate, userPostcode }) {
   const [fuelData, setFuelData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const hasFetchedRef = useRef(false); // Add this line
 
   // Get postcode from props or localStorage
   const postcode = userPostcode || localStorage.getItem('userPostcode') || '2000';
 
   useEffect(() => {
+    // Reset the ref when fuel type changes
+    hasFetchedRef.current = false;
+
     // If we have cached data for this fuel type, use it
     if (fuelData && fuelData.fuelType === selectedFuel) {
       console.log('✅ Using cached fuel data');
@@ -42,14 +46,14 @@ function FuelPrices({ onNavigate, userPostcode }) {
 
     try {
       const response = await fetch('/api/n8n/webhook/fuel-check', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                postcode: postcode,
-                fuelType: selectedFuel,
-                sessionId: localStorage.getItem('sessionId') || 'demo-session'
-            })
-        });
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          postcode: postcode,
+          fuelType: selectedFuel,
+          sessionId: localStorage.getItem('sessionId') || 'demo-session'
+        })
+      });
 
       if (!response.ok) {
         throw new Error(`Server error: ${response.status}`);
@@ -68,30 +72,30 @@ function FuelPrices({ onNavigate, userPostcode }) {
   };
 
   if (loading) {
-  return (
-    <div className="fuel-prices">
-      <div className="fuel-header">
-        <div className="fuel-header-top">
-          <button className="back-button" onClick={() => onNavigate("overview")}>
-            ←
-          </button>
-          <h2 className="fuel-title">⛽ Fuel Prices</h2>
+    return (
+      <div className="fuel-prices">
+        <div className="fuel-header">
+          <div className="fuel-header-top">
+            <button className="back-button" onClick={() => onNavigate("overview")}>
+              ←
+            </button>
+            <h2 className="fuel-title">⛽ Fuel prices around your suburb</h2>
+          </div>
+        </div>
+        <div className="loading-container">
+          <div className="spinner">⛽</div>
+          <p>Finding the cheapest fuel near you...</p>
         </div>
       </div>
-      <div className="loading-container">
-            <div className="spinner">⛽</div>
-            <p>Finding the cheapest fuel near you...</p>
-        </div>
-    </div>
-  );
-}
+    );
+  }
 
   if (error) {
     return (
       <div className="fuel-prices">
         <div className="fuel-header">
           <button className="back-button" onClick={() => onNavigate("overview")}>←</button>
-          <h2>⛽ Fuel Prices</h2>
+          <h2>⛽ Fuel prices around your suburb</h2>
         </div>
         <div style={{ padding: '20px', textAlign: 'center', color: 'red' }}>
           Error: {error}
@@ -121,7 +125,7 @@ function FuelPrices({ onNavigate, userPostcode }) {
           <button className="back-button" onClick={() => onNavigate("overview")}>
             ←
           </button>
-          <h2 className="fuel-title">⛽ Fuel Prices</h2>
+          <h2 className="fuel-title">⛽ Fuel prices around your suburb</h2>
         </div>
 
         {/* Location indicator */}
