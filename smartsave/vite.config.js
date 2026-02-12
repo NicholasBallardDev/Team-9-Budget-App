@@ -9,6 +9,7 @@ export default defineConfig({
         target: 'https://cee-wee.app.n8n.cloud',
         changeOrigin: true,
         rewrite: (path) => {
+          // Remove /api/n8n prefix, keep the rest
           const newPath = path.replace(/^\/api\/n8n/, '');
           console.log('Rewriting:', path, '→', newPath);
           return newPath;
