@@ -178,8 +178,8 @@ function App() {
           <Route path="/groceries" element={<GroceryComparison />} />
           <Route path="/aianalysis" element={<AIAnalysis />} />
         </Routes>
+        <BottomNav />
       </BrowserRouter>
-      <BottomNav />
     </div>
   );
 }

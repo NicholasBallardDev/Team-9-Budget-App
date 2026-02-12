@@ -4,34 +4,37 @@ import './BottomNav.css';
 function BottomNav() {
   return (
     <nav className="bottom-nav">
-      <button
+      <Link
         to="/"
         className="bottom-nav-button"
       >
-        💰 Overview
-      </button>
+        <div className="bottom-nav-icon">💰</div>
+        <span>Overview</span>
+      </Link>
       
-      <button
-        className={`bottom-nav-button`}
+      <Link
+        to="/fuel"
+        className="bottom-nav-button"
       >
         <div className="bottom-nav-icon">⛽</div>
         <span>Fuel</span>
-      </button>
+      </Link>
       
-      <button
-        className={`bottom-nav-button`}
-        onClick={() => onNavigate("groceries")}
+      <Link
+        to="/groceries"
+        className="bottom-nav-button"
       >
         <div className="bottom-nav-icon">🛒</div>
         <span>Groceries</span>
-      </button>
+      </Link>
 
-      <button
-        className={`bottom-nav-button`}
+      <Link
+        to="/aianalysis"
+        className="bottom-nav-button"
       >
         <div className="bottom-nav-icon">🤖</div>
         <span>AI</span>
-      </button>
+      </Link>
     </nav>
   );
 }
