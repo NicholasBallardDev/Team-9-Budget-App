@@ -5,7 +5,7 @@ function BottomNav() {
   return (
     <nav className="bottom-nav">
       <Link
-        to="/"
+        to="/overview"
         className="bottom-nav-button"
       >
         <div className="bottom-nav-icon">💰</div>

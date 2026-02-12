@@ -8,7 +8,7 @@ import BottomNav from './components/BottomNav/BottomNav';
 import AIAnalysis from './pages/AIAnalysis/AIAnalysis';
 import GoalSetting from './pages/GoalSetting/GoalSetting';
 import './App.css';
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 
 const N8N_FINANCIAL_WEBHOOK = "/api/n8n/webhook/savie-form";
 const N8N_FUEL_WEBHOOK = "/api/n8n/webhook/fuel-check";
@@ -39,11 +39,10 @@ function getSessionId() {
 }
 
 function App() {
+  const location = useLocation();
   const [sessionId] = useState(getSessionId());
-  const [isOnboarding, setIsOnboarding] = useState(false);
   const [showInsightPopup, setShowInsightPopup] = useState(false);
   const [initialInsight, setInitialInsight] = useState("");
-  const [currentPage, setCurrentPage] = useState("overview");
   const [formData, setFormData] = useState(null);
   const [insights, setInsights] = useState(null);
   const [loadingInsights, setLoadingInsights] = useState(false);
@@ -146,42 +145,31 @@ function App() {
 
   const closeInsightPopup = () => {
     setShowInsightPopup(false);
-    setIsOnboarding(false);
-    setCurrentPage("overview");
   };
 
   if (showInsightPopup) {
     return (
       <InsightPopup 
         insight={initialInsight} 
-        onClose={closeInsightPopup} 
-      />
-    );
-  }
-
-  if (isOnboarding) {
-    return (
-      <Onboarding 
-        onComplete={handleOnboardingComplete}
-        isLoading={false}
+        onClose={closeInsightPopup}
       />
     );
   }
 
   return (
     <div className="app">
-      <BrowserRouter>
-
-        {/* Routes */}
-        <Routes>
-          <Route path="/" element={<FinancialOverview />} />
-          <Route path="/fuel" element={<FuelPrices />} />
-          <Route path="/groceries" element={<GroceryComparison />} />
-          <Route path="/aianalysis" element={<AIAnalysis />} />
-          <Route path="/goals" element={<GoalSetting />} />
-        </Routes>
+      {/* Routes */}
+      <Routes>
+        <Route path="/" element={<Onboarding onComplete={handleOnboardingComplete} isLoading={loadingInsights} />} />
+        <Route path="/overview" element={<FinancialOverview insights={insights} />} />
+        <Route path="/fuel" element={<FuelPrices fuelData={fuelData} setFuelData={setFuelData} />} />
+        <Route path="/groceries" element={<GroceryComparison groceryData={groceryData} setGroceryData={setGroceryData} />} />
+        <Route path="/aianalysis" element={<AIAnalysis />} />
+        <Route path="/goals" element={<GoalSetting />} />
+      </Routes>
+      {location.pathname !== '/' && (
         <BottomNav />
-      </BrowserRouter>
+      )}
     </div>
   );
 }
