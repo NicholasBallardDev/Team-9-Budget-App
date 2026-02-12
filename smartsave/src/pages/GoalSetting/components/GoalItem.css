@@ -242,3 +242,11 @@
 .goal-item-btn-cancel:hover {
   background-color: #f3f4f6;
 }
+
+/* Completed Goal Styling */
+.completed {
+  opacity: 0.6;
+  border-left-color: #4caf50; /* Green color for completed goals */
+  background-color: #a5d6a7;
+  text-decoration: line-through; /* Strikethrough for completed text */
+}
