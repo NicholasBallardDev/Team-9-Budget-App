@@ -1,0 +1,24 @@
+{
+  "name": "savie-mcp-server",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx src/index.ts",
+    "dev:http": "tsx src/http-server.ts",
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "bin": {
+    "savie-mcp-server": "./dist/index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.26.0",
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.2.3",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  }
+}
