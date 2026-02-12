@@ -149,7 +149,7 @@ function GoalItem({
             onClick={() => onDelete(goal.id)}
             title="Delete goal"
           >
-            🗑️
+            ❌ Delete
           </button>
         </div>
 
