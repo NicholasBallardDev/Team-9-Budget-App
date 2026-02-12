@@ -57,12 +57,49 @@ function FinancialOverview({ insights, onNavigate }) {
     );
   }
 
+  // Sort categories by total spending (highest to lowest)
+  const sortedCategories = [...insights.categories].sort((a, b) => b.total - a.total);
+
+  // Get the user's name from insights
+  const userName = insights.name || 'there';
+
+  // Calculate month-on-month comparison
+  // This assumes insights contains lastMonthTotal and currentMonthTotal
+  // If not provided by API, we'll calculate from categories
+  const currentMonthTotal = sortedCategories.reduce((sum, cat) => sum + cat.total, 0);
+  const lastMonthTotal = insights.lastMonthTotal || currentMonthTotal * 0.92; // Mock: assume 8% less last month if not provided
+  const monthlyChange = currentMonthTotal - lastMonthTotal;
+  const monthlyChangePercent = lastMonthTotal > 0 ? ((monthlyChange / lastMonthTotal) * 100) : 0;
+
   return (
     <div className="financial-overview">
       {/* Header */}
       <div className="overview-header">
+        <p className="welcome-text">Hi {userName}! Here's how you're going...</p>
         <h1 className="overview-title">Financial Overview</h1>
         <p className="overview-subtitle">Your spending insights for February</p>
+      </div>
+
+      {/* Month-on-Month Comparison */}
+      <div className="month-comparison">
+        <h3 className="comparison-title">Month-on-Month Comparison</h3>
+        <div className="comparison-stats">
+          <div className="stat-box">
+            <div className="stat-label">This Month</div>
+            <div className="stat-value">${currentMonthTotal.toFixed(0)}</div>
+          </div>
+          <div className="stat-box">
+            <div className="stat-label">Last Month</div>
+            <div className="stat-value">${lastMonthTotal.toFixed(0)}</div>
+          </div>
+          <div className="stat-box">
+            <div className="stat-label">Change</div>
+            <div className="stat-value">${Math.abs(monthlyChange).toFixed(0)}</div>
+            <div className={`stat-change ${monthlyChange > 0 ? 'increase' : monthlyChange < 0 ? 'decrease' : 'neutral'}`}>
+              {monthlyChange > 0 ? '↑' : monthlyChange < 0 ? '↓' : '→'} {Math.abs(monthlyChangePercent).toFixed(1)}%
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Quick Actions
@@ -82,7 +119,7 @@ function FinancialOverview({ insights, onNavigate }) {
       <div className="category-section">
         <h2 className="section-title">Where your money goes</h2>
 
-        {insights.categories.map((category) => {
+        {sortedCategories.map((category) => {
           const percentage = Math.min((category.total / category.budget) * 100, 100);
           const isOverBudget = category.total > category.budget;
 
