@@ -1,14 +1,14 @@
-import { useState, useEffect, useRef } from 'react';
-import BrandBadge from '../../components/BrandBadge/BrandBadge';
-import './FuelPrices.css';
+import { useState, useEffect, useRef } from "react"
+import BrandBadge from "../../components/BrandBadge/BrandBadge"
+import "./FuelPrices.css"
 
 const FUEL_TYPES = [
   { id: "U91", short: "U91", name: "Unleaded 91" },
   { id: "U95", short: "U95", name: "Unleaded 95" },
   { id: "U98", short: "U98", name: "Unleaded 98" },
   { id: "E10", short: "E10", name: "Ethanol 10" },
-  { id: "Diesel", short: "DSL", name: "Diesel" }
-];
+  { id: "Diesel", short: "DSL", name: "Diesel" },
+]
 
 // Mock data fallback
 const MOCK_FUEL_DATA = {
@@ -23,157 +23,160 @@ const MOCK_FUEL_DATA = {
       name: "Metro Petroleum St Leonards",
       address: "34 Pacific Hwy, St Leonards NSW 2065",
       brand: "Metro",
-      selectedPrice: 1.619
+      selectedPrice: 1.619,
     },
     {
       id: 2,
       name: "7-Eleven Crows Nest",
       address: "12 Falcon St, Crows Nest NSW 2065",
       brand: "7-Eleven",
-      selectedPrice: 1.659
+      selectedPrice: 1.659,
     },
     {
       id: 3,
       name: "BP Mosman",
       address: "456 Military Rd, Mosman NSW 2088",
       brand: "BP",
-      selectedPrice: 1.649
+      selectedPrice: 1.649,
     },
     {
       id: 4,
       name: "Shell Neutral Bay",
       address: "789 Military Rd, Neutral Bay NSW 2089",
       brand: "Shell",
-      selectedPrice: 1.679
+      selectedPrice: 1.679,
     },
     {
       id: 5,
       name: "Coles Express Chatswood",
       address: "445 Victoria Ave, Chatswood NSW 2067",
       brand: "Coles",
-      selectedPrice: 1.679
-    }
+      selectedPrice: 1.679,
+    },
   ],
   mostVisitedStation: {
     brand: "7-Eleven",
-    visits: 8
-  }
-};
+    visits: 8,
+  },
+}
 
 function FuelPrices({ onNavigate, userPostcode }) {
-  const [selectedFuel, setSelectedFuel] = useState("U91");
-  const [fuelData, setFuelData] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [usingMockData, setUsingMockData] = useState(false);
-  const hasFetchedRef = useRef(false);
-  const timeoutRef = useRef(null);
+  const [selectedFuel, setSelectedFuel] = useState("U91")
+  const [fuelData, setFuelData] = useState(null)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
+  const [usingMockData, setUsingMockData] = useState(false)
+  const hasFetchedRef = useRef(false)
+  const timeoutRef = useRef(null)
 
   // Get postcode from props or localStorage
-  const postcode = userPostcode || localStorage.getItem('userPostcode') || '2000';
+  const postcode =
+    userPostcode || localStorage.getItem("userPostcode") || "2000"
 
   useEffect(() => {
     // Reset the ref when fuel type changes
-    hasFetchedRef.current = false;
-    setUsingMockData(false);
+    hasFetchedRef.current = false
+    setUsingMockData(false)
 
     // Clear any existing timeout
     if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
+      clearTimeout(timeoutRef.current)
     }
 
     // If we have cached data for this fuel type, use it
     if (fuelData && fuelData.fuelType === selectedFuel && !usingMockData) {
-      console.log('✅ Using cached fuel data');
-      return;
+      console.log("✅ Using cached fuel data")
+      return
     }
 
     // Prevent duplicate fetches in strict mode
     if (hasFetchedRef.current) {
-      console.log('⏭️ Already fetching, skipping');
-      return;
+      console.log("⏭️ Already fetching, skipping")
+      return
     }
 
-    hasFetchedRef.current = true;
-    fetchFuelPrices();
+    hasFetchedRef.current = true
+    fetchFuelPrices()
 
     // Cleanup timeout on unmount
     return () => {
       if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
+        clearTimeout(timeoutRef.current)
       }
-    };
-  }, [selectedFuel]);
+    }
+  }, [selectedFuel])
 
   const fetchFuelPrices = async () => {
-    setLoading(true);
-    setError(null);
+    setLoading(true)
+    setError(null)
 
     // Set a 2-second timeout to fallback to mock data
     timeoutRef.current = setTimeout(() => {
-      console.warn('⚠️ API taking too long, using mock data');
-      setUsingMockData(true);
+      console.warn("⚠️ API taking too long, using mock data")
+      setUsingMockData(true)
       setFuelData({
         ...MOCK_FUEL_DATA,
-        fuelType: selectedFuel
-      });
-      setLoading(false);
-    }, 2000);
+        fuelType: selectedFuel,
+      })
+      setLoading(false)
+    }, 2000)
 
     try {
-      const response = await fetch('/api/n8n/webhook/fuel-check', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("/api/n8n/webhook/fuel-check", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           postcode: postcode,
           fuelType: selectedFuel,
-          sessionId: localStorage.getItem('sessionId') || 'demo-session'
-        })
-      });
+          sessionId: localStorage.getItem("sessionId") || "demo-session",
+        }),
+      })
 
       // Clear timeout if request completes in time
-      clearTimeout(timeoutRef.current);
+      clearTimeout(timeoutRef.current)
 
       if (!response.ok) {
-        throw new Error(`Server error: ${response.status}`);
+        throw new Error(`Server error: ${response.status}`)
       }
 
-      const data = await response.json();
-      console.log('✅ Fuel data received from API:', data);
-      
+      const data = await response.json()
+      console.log("✅ Fuel data received from API:", data)
+
       // Only update if we haven't already shown mock data
       if (!usingMockData) {
-        setFuelData(data);
+        setFuelData(data)
       }
-
     } catch (error) {
-      console.error('❌ Error fetching fuel prices:', error);
-      
+      console.error("❌ Error fetching fuel prices:", error)
+
       // Clear timeout
-      clearTimeout(timeoutRef.current);
-      
+      clearTimeout(timeoutRef.current)
+
       // If we haven't shown mock data yet, show it now
       if (!usingMockData) {
-        console.log('🔄 Falling back to mock data due to error');
-        setUsingMockData(true);
+        console.log("🔄 Falling back to mock data due to error")
+        setUsingMockData(true)
         setFuelData({
           ...MOCK_FUEL_DATA,
-          fuelType: selectedFuel
-        });
+          fuelType: selectedFuel,
+        })
       }
-      
-      setError(error.message);
+
+      setError(error.message)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   if (loading) {
     return (
       <div className="fuel-prices">
         <div className="fuel-header">
           <div className="fuel-header-top">
-            <button className="back-button" onClick={() => onNavigate("overview")}>
+            <button
+              className="back-button"
+              onClick={() => onNavigate("overview")}
+            >
               ←
             </button>
             <h2 className="fuel-title">⛽ Fuel prices around your suburb</h2>
@@ -184,7 +187,7 @@ function FuelPrices({ onNavigate, userPostcode }) {
           <p>Finding the cheapest fuel near you...</p>
         </div>
       </div>
-    );
+    )
   }
 
   if (!fuelData) {
@@ -194,18 +197,21 @@ function FuelPrices({ onNavigate, userPostcode }) {
           <h2>⛽ Loading...</h2>
         </div>
       </div>
-    );
+    )
   }
 
-  const mostVisited = fuelData.mostVisitedStation;
-  const rewardsProgress = (mostVisited.visits / 10) * 100;
+  const mostVisited = fuelData.mostVisitedStation
+  const rewardsProgress = (mostVisited.visits / 10) * 100
 
   return (
     <div className="fuel-prices">
       {/* Header */}
       <div className="fuel-header">
         <div className="fuel-header-top">
-          <button className="back-button" onClick={() => onNavigate("overview")}>
+          <button
+            className="back-button"
+            onClick={() => onNavigate("overview")}
+          >
             ←
           </button>
           <h2 className="fuel-title">⛽ Fuel prices around your suburb</h2>
@@ -219,16 +225,14 @@ function FuelPrices({ onNavigate, userPostcode }) {
         )}
 
         {/* Location indicator */}
-        <div className="fuel-location">
-          📍 Near {fuelData.locationName}
-        </div>
+        <div className="fuel-location">📍 Near {fuelData.locationName}</div>
 
         {/* Fuel type selector */}
         <div className="fuel-type-selector">
-          {FUEL_TYPES.map(fuel => (
+          {FUEL_TYPES.map((fuel) => (
             <button
               key={fuel.id}
-              className={`fuel-type-button ${selectedFuel === fuel.id ? 'active' : ''}`}
+              className={`fuel-type-button ${selectedFuel === fuel.id ? "active" : ""}`}
               onClick={() => setSelectedFuel(fuel.id)}
             >
               {fuel.short}
@@ -239,9 +243,7 @@ function FuelPrices({ onNavigate, userPostcode }) {
 
       {/* AI Insight */}
       {fuelData.insight && (
-        <div className="fuel-insight-banner">
-          {fuelData.insight}
-        </div>
+        <div className="fuel-insight-banner">{fuelData.insight}</div>
       )}
 
       {/* Partnership Rewards */}
@@ -259,15 +261,15 @@ function FuelPrices({ onNavigate, userPostcode }) {
         </div>
 
         <div className="rewards-progress">
-          <div 
+          <div
             className="rewards-progress-bar"
             style={{ width: `${rewardsProgress}%` }}
           />
         </div>
 
         <p className="rewards-message">
-          {mostVisited.visits >= 10 
-            ? "🎉 You've earned a $10 gift card!" 
+          {mostVisited.visits >= 10
+            ? "🎉 You've earned a $10 gift card!"
             : `${10 - mostVisited.visits} more visits to earn a $10 gift card`}
         </p>
       </div>
@@ -276,7 +278,8 @@ function FuelPrices({ onNavigate, userPostcode }) {
       {fuelData.cheapestPrice && (
         <div className="best-price-banner">
           💰 Best price: <strong>${fuelData.cheapestPrice.toFixed(2)}/L</strong>
-          {fuelData.weeklySavings > 0 && ` • Save $${fuelData.weeklySavings}/week`}
+          {fuelData.weeklySavings > 0 &&
+            ` • Save $${fuelData.weeklySavings}/week`}
         </div>
       )}
 
@@ -286,24 +289,25 @@ function FuelPrices({ onNavigate, userPostcode }) {
 
         {fuelData.stations && fuelData.stations.length > 0 ? (
           fuelData.stations.map((station, idx) => {
-            const savings = idx > 0 ? (station.selectedPrice - fuelData.cheapestPrice) : 0;
-            
+            const savings =
+              idx > 0 ? station.selectedPrice - fuelData.cheapestPrice : 0
+
             return (
-              <div 
-                key={station.id} 
-                className={`station-card ${idx === 0 ? 'best' : ''}`}
+              <div
+                key={station.id}
+                className={`station-card ${idx === 0 ? "best" : ""}`}
               >
                 {idx === 0 && <div className="best-badge">🏆 Best Price</div>}
-                
+
                 <BrandBadge brand={station.brand} />
-                
+
                 <div className="station-info">
                   <div className="station-name">{station.name}</div>
                   <div className="station-address">{station.address}</div>
                 </div>
-                
+
                 <div className="station-price">
-                  <div className={`price-value ${idx === 0 ? 'best' : ''}`}>
+                  <div className={`price-value ${idx === 0 ? "best" : ""}`}>
                     ${station.selectedPrice.toFixed(2)}
                   </div>
                   <div className="price-unit">per litre</div>
@@ -314,7 +318,7 @@ function FuelPrices({ onNavigate, userPostcode }) {
                   )}
                 </div>
               </div>
-            );
+            )
           })
         ) : (
           <div className="no-stations">
@@ -323,7 +327,7 @@ function FuelPrices({ onNavigate, userPostcode }) {
         )}
       </div>
     </div>
-  );
+  )
 }
 
-export default FuelPrices;
+export default FuelPrices

@@ -1,0 +1,33 @@
+.savings-summary {
+  background-color: #e8f5e9;
+  border: 1px solid #4caf50;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 24px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.savings-header {
+  margin-bottom: 8px;
+}
+
+.savings-header h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 800;
+  color: #4caf50;
+}
+
+.savings-amount {
+  font-size: 36px;
+  font-weight: 700;
+  color: #4caf50;
+  margin-bottom: 4px;
+}
+
+.savings-message {
+  font-size: 14px;
+  color: #555;
+  margin: 0;
+}
