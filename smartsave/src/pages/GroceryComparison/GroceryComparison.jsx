@@ -50,6 +50,7 @@ const DUMMY_GROCERY_DATA = {
 function GroceryComparison({ userPostcode, initialGroceryData }) {
   const [groceryData, setGroceryData] = useState(initialGroceryData)
   const [loading, setLoading] = useState(false)
+  const [usingMockData, setUsingMockData] = useState(false)
   const hasFetchedRef = useRef(false)
   const navigate = useNavigate()
 
@@ -58,7 +59,7 @@ function GroceryComparison({ userPostcode, initialGroceryData }) {
 
   useEffect(() => {
     // If we have cached data, use it
-    if (groceryData) {
+    if (groceryData && !usingMockData) {
       console.log("✅ Using cached grocery data")
       return
     }
@@ -74,8 +75,20 @@ function GroceryComparison({ userPostcode, initialGroceryData }) {
   }, [])
 
   const fetchGroceryData = async () => {
-    console.log("Fetching grocery data...")
+    console.log("🚀 Starting fetch at:", new Date().toISOString())
     setLoading(true)
+    let timeoutTriggered = false
+    let timeoutId = null
+
+    // Set a 2-second timeout to fallback to mock data
+    timeoutId = setTimeout(() => {
+      console.warn("⚠️ TIMEOUT TRIGGERED at:", new Date().toISOString())
+      timeoutTriggered = true
+      setUsingMockData(true)
+      setGroceryData(DUMMY_GROCERY_DATA)
+      setLoading(false)
+      console.log("✅ Loading set to false, data set to mock")
+    }, 2000)
 
     try {
       const response = await fetch("/api/n8n/webhook/grocery-comparison", {
@@ -89,6 +102,19 @@ function GroceryComparison({ userPostcode, initialGroceryData }) {
           sessionId: localStorage.getItem("sessionId") || "demo-session",
         }),
       })
+
+      console.log("📡 Response received at:", new Date().toISOString())
+
+      // Clear timeout if request completes in time
+      if (timeoutId) {
+        clearTimeout(timeoutId)
+      }
+
+      // If timeout already triggered, ignore this response
+      if (timeoutTriggered) {
+        console.log("⏭️ API returned late, ignoring response")
+        return
+      }
 
       console.log("Response status:", response.status)
 
@@ -106,38 +132,47 @@ function GroceryComparison({ userPostcode, initialGroceryData }) {
       const data = JSON.parse(text)
       console.log("✅ Grocery data received:", data)
       setGroceryData(data)
+      setUsingMockData(false)
+      setLoading(false)
     } catch (error) {
       console.error("❌ Error fetching grocery data:", error)
-      toast.warn(
-        "Could not fetch live data. Displaying sample information instead.",
-      )
-      setGroceryData(DUMMY_GROCERY_DATA)
-    } finally {
-      setLoading(false)
+
+      // Clear timeout
+      if (timeoutId) {
+        clearTimeout(timeoutId)
+      }
+
+      // If timeout hasn't triggered yet, show mock data
+      if (!timeoutTriggered) {
+        console.log("🔄 Falling back to mock data due to error")
+        setUsingMockData(true)
+        setGroceryData(DUMMY_GROCERY_DATA)
+        setLoading(false)
+      }
     }
   }
 
   if (loading) {
-  return (
-    <div className="grocery-comparison">
-      <div className="grocery-header">
-        <div className="grocery-header-top">
-          <button
-            className="back-button"
-            onClick={() => navigate("/overview")}
-          >
-            ←
-          </button>
-          <h2 className="grocery-title">🛒 Grocery Comparison</h2>
+    return (
+      <div className="grocery-comparison">
+        <div className="grocery-header">
+          <div className="grocery-header-top">
+            <button
+              className="back-button"
+              onClick={() => navigate("/overview")}
+            >
+              ←
+            </button>
+            <h2 className="grocery-title">🛒 Grocery Comparison</h2>
+          </div>
+        </div>
+        <div className="loading-container">
+          <div className="grocery-cart-icon">🛒</div>
+          <p>Finding the best grocery prices...</p>
         </div>
       </div>
-      <div className="loading-container">
-        <div className="grocery-cart-icon">🛒</div>  {/* Changed from spinner class */}
-        <p>Finding the best grocery prices...</p>
-      </div>
-    </div>
-  )
-}
+    )
+  }
 
   if (!groceryData) {
     return (
@@ -160,6 +195,13 @@ function GroceryComparison({ userPostcode, initialGroceryData }) {
           </button>
           <h2 className="grocery-title">🛒 Grocery Comparison</h2>
         </div>
+
+        {/* Mock data indicator */}
+        {usingMockData && (
+          <div className="mock-data-banner">
+            ℹ️ API taking longer than expected - displaying sample data
+          </div>
+        )}
 
         {/* Location indicator */}
         <div className="grocery-location">
