@@ -1,5 +1,9 @@
 # Team-9-Budget-App
 
+#Overview
+As part of the Accenture Tech Bootcamp, we collaborated within a group of 8 to solve a problem relating to the cost of living, and budgeting. 
+We developed an Agentic AI driven financial goal setting app, where users can gain insights into their spending habits, create goals, and receive feedback from AI.
+
 # Features
 ## Home
 ![Home](https://github.com/user-attachments/assets/4f9525b2-7be2-45d6-ab07-09c027f4c2ee)
@@ -15,4 +19,11 @@
 
 ## AI Goal Setting Insights
 <img width="1880" height="273" alt="Screenshot 2026-03-05 133117" src="https://github.com/user-attachments/assets/a7aa7163-763e-4a21-9eed-f3ffbf9be98b" />
+
+#Future considerations
+## Scalability
+-Deployment on AWS
+
+## Features
+-Banking app integration
 
